@@ -1,0 +1,157 @@
+Number,Type,Site,Specimen,ID_artefact,prev_assigned_type
+1,1,Hell Gap,392-66,Hell_Gap_392-66,Goshen
+3,1,Jim Pitts,a,Jim_Pitts-7a,Goshen
+3,1,Jim Pitts,a,Jim_Pitts-7a_2,Goshen
+5,1,Jim Pitts,d,Jim_Pitts-7d,Goshen
+5,1,Jim Pitts,d,Jim_Pitts-7d_2,Goshen
+6,1,Mill Iron,1510,Mill_Iron_1510,Goshen
+7,1,Mill Iron,1582,Mill_Iron_1582,Goshen
+8,1,Mill Iron,1583,Mill_Iron_1583,Goshen
+9,1,Mill Iron,1586,Mill_Iron_1586,Goshen
+10,1,Mill Iron,1587,Mill_Iron_1587,Goshen
+11,1,Mill Iron,1588,Mill_Iron_1588,Goshen
+12,1,Mill Iron,1607,Mill_Iron_1607,Goshen
+13,1,Mill Iron,269,Mill_Iron_269,Goshen
+14,1,Mill Iron,279,Mill_Iron_278-279,Goshen
+15,1,Mill Iron,288,Mill_Iron_288,Goshen
+16,1,Mill Iron,289,Mill_Iron_289,Goshen
+17,1,Mill Iron,266,Mill_Iron-24CT30_266,Goshen
+18,2,Plainview,HA0-1,HA0-1d,Plainview
+19,2,Plainview,HA725-10,HA725-10e,Plainview
+20,2,Plainview,HA725-19,HA725-19,Plainview
+21,2,Plainview,HA725-1,HA725-1,Plainview
+22,2,Plainview,HA725-23,HA725-23,Plainview
+23,2,Plainview,HA725-29,HA725-29,Plainview
+24,2,Plainview,HA725-2,HA725-2c,Plainview
+25,2,Plainview,HA725-5,HA725-5,Plainview
+26,2,Plainview,HA725-9,HA725-9,Plainview
+27,2,Plainview,HA725-c,HA725-c,Plainview
+32,2,Milnesand,MC1146-10,MC1146-10b,Plainview
+33,2,Milnesand,MC1146-11,MC1146-11c,Plainview
+34,2,Milnesand,MC1146-12,MC1146-12c,Plainview
+35,2,Milnesand,MC1146-13,MC1146-13b,Plainview
+36,2,Milnesand,MC1146-16,MC1146-16a,Plainview
+37,2,Milnesand,MC1146-39,MC1146-39a,Plainview
+38,2,Milnesand,MC1146-4,MC1146-4a,Plainview
+39,2,Milnesand,MC1146-63,MC1146-63a,Plainview
+40,2,Milnesand,MC11,MC11,Plainview
+41,2,Milnesand,MC21,MC21,Plainview
+42,2,Milnesand,MC22,MC22,Plainview
+43,2,Milnesand,MC23,MC23,Plainview
+44,2,Milnesand,MC24,MC24,Plainview
+45,2,Milnesand,MC25,MC25,Plainview
+46,2,Milnesand,MC26,MC26,Plainview
+47,2,Milnesand,MC27,MC27,Plainview
+48,2,Milnesand,MC28,MC28,Plainview
+49,2,Milnesand,MC29,MC29,Plainview
+50,2,Milnesand,MC30,MC30,Plainview
+51,2,Milnesand,MC32,MC32,Plainview
+52,2,Milnesand,MC33,MC33,Plainview
+53,2,Milnesand,MC34,MC34,Plainview
+54,2,Milnesand,MC35,MC35,Plainview
+55,2,Milnesand,MC36,MC36,Plainview
+56,2,Milnesand,MC37,MC37,Plainview
+57,2,Milnesand,MC38,MC38,Plainview
+58,2,Milnesand,MC39,MC39,Plainview
+59,2,Milnesand,MC40,MC40,Plainview
+60,2,Milnesand,MC41,MC41,Plainview
+61,2,Milnesand,MC42,MC42,Plainview
+62,2,Milnesand,MC43,MC43,Plainview
+63,2,Milnesand,MC44,MC44,Plainview
+64,2,Milnesand,MC45,MC45,Plainview
+65,2,Milnesand,MC46,MC46,Plainview
+66,2,Milnesand,MC5,MC5,Plainview
+67,2,Milnesand,MC65,MC65,Plainview
+68,2,Milnesand,MC70,MC70,Plainview
+69,2,Milnesand,MC78,MC78,Plainview
+70,2,Milnesand,MC78d,MC78d,Plainview
+71,2,Ryans,1185,Ryans1185,Plainview
+72,2,Ryans,1196,Ryans1196,Plainview
+73,2,Ryans,14301,Ryans14301,Plainview
+74,2,Ryans,14302,Ryans14302,Plainview
+75,2,Ryans,14307,Ryans14307,Plainview
+76,2,Ryans,14347,Ryans14347,Plainview
+77,2,Ryans,14348,Ryans14348,Plainview
+78,2,Ryans,14370,Ryans14370,Plainview
+79,2,Ryans,14371,Ryans14371,Plainview
+80,2,Ryans,14378,Ryans14378,Plainview
+81,2,Ryans,2007,Ryans2007,Plainview
+82,2,Ted Williamson,249,TW_249,Plainview
+83,2,Ted Williamson,250a,TW_250a,Plainview
+84,2,Ted Williamson,250b,TW_250b,Plainview
+85,2,Ted Williamson,252a,TW_252a,Plainview
+86,2,Ted Williamson,252b,TW_252b,Plainview
+87,2,Ted Williamson,253a,TW_253a,Plainview
+88,2,Ted Williamson,253b,TW_253b,Plainview
+89,2,Ted Williamson,254a,TW_254a,Plainview
+90,2,Ted Williamson,254b,TW_254b,Plainview
+91,2,Ted Williamson,255,TW_255,Plainview
+92,2,Ted Williamson,267a,TW_267a,Plainview
+93,2,Ted Williamson,267b,TW_267b,Plainview
+94,2,Ted Williamson,268b,TW_268b,Plainview
+95,2,Ted Williamson,271,TW_271,Plainview
+96,2,Ted Williamson,272,TW_272,Plainview
+97,2,Ted Williamson,272b,TW_272b,Plainview
+98,2,Ted Williamson,273,TW_273,Plainview
+99,2,Ted Williamson,280,TW_280,Plainview
+100,2,Ted Williamson,281,TW_281,Plainview
+101,2,Ted Williamson,282a,TW_282a,Plainview
+102,2,Ted Williamson,282b,TW_282b,Plainview
+103,2,Ted Williamson,284a,TW_284a,Plainview
+104,2,Ted Williamson,284b,TW_284b,Plainview
+105,2,Ted Williamson,285a,TW_285a,Plainview
+106,2,Ted Williamson,285b,TW_285b,Plainview
+107,2,Ted Williamson,286,TW_286,Plainview
+108,2,Ted Williamson,295,TW_295,Plainview
+109,2,Ted Williamson,296a,TW_296a,Plainview
+110,2,Ted Williamson,296b,TW_296b,Plainview
+111,2,Ted Williamson,298a,TW_298a,Plainview
+112,2,Ted Williamson,298b,TW_298b,Plainview
+113,2,Ted Williamson,301a,TW_301a,Plainview
+114,2,Ted Williamson,301b,TW_301b,Plainview
+115,2,Ted Williamson,302a,TW_302a,Plainview
+116,2,Ted Williamson,302b,TW_302b,Plainview
+117,2,Ted Williamson,308,TW_308,Plainview
+118,2,Ted Williamson,309,TW_309,Plainview
+119,2,Ted Williamson,310,TW_310,Plainview
+120,2,Ted Williamson,311a,TW_311a,Plainview
+121,2,Ted Williamson,311b,TW_311b,Plainview
+122,2,Ted Williamson,312a,TW_312a,Plainview
+123,2,Ted Williamson,312b,TW_312b,Plainview
+124,2,Ted Williamson,313,TW_313,Plainview
+125,2,Ted Williamson,320a,TW_320a,Plainview
+126,2,Ted Williamson,320b,TW_320b,Plainview
+127,2,Ted Williamson,321,TW_321,Plainview
+128,2,Ted Williamson,322a,TW_322a,Plainview
+129,2,Ted Williamson,322b,TW_322b,Plainview
+130,2,Ted Williamson,324a,TW_324a,Plainview
+131,2,Ted Williamson,324b,TW_324b,Plainview
+132,2,Ted Williamson,326a,TW_326a,Plainview
+133,2,Ted Williamson,326b,TW_326b,Plainview
+134,2,Ted Williamson,327a,TW_327a,Plainview
+135,2,Ted Williamson,327b,TW_327b,Plainview
+136,2,Warnica-Wilson,RO-10,WW_RO-10,Plainview
+137,2,Warnica-Wilson,RO-13-1,WW_RO-13-1,Plainview
+138,2,Warnica-Wilson,RO-13b-1,WW_RO-13b-1,Plainview
+139,2,Warnica-Wilson,RO-1c-1,WW_RO-1c-1,Plainview
+140,2,Warnica-Wilson,RO-1d-1,WW_RO-1d-1,Plainview
+141,2,Warnica-Wilson,RO-1e-1,WW_RO-1e-1,Plainview
+142,2,Warnica-Wilson,RO-1f-1,WW_RO-1f-1,Plainview
+143,2,Warnica-Wilson,RO-2-1,WW_RO-2-1,Plainview
+144,2,Warnica-Wilson,RO-2-40-1,WW_RO-2-40-1,Plainview
+145,2,Warnica-Wilson,RO-2-65-1,WW_RO-2-65-1,Plainview
+146,2,Warnica-Wilson,RO-2-73,WW_RO-2-73,Plainview
+147,2,Warnica-Wilson,RO-27b-1,WW_RO-27b-1,Plainview
+148,2,Warnica-Wilson,RO-27d-1,WW_RO-27d-1,Plainview
+149,2,Warnica-Wilson,RO-27e-1,WW_RO-27e-1,Plainview
+150,2,Warnica-Wilson,RO-27,WW_RO-27,Plainview
+151,2,Warnica-Wilson,RO-28,WW_RO-28,Plainview
+152,2,Warnica-Wilson,RO-29,WW_RO-29,Plainview
+153,2,Warnica-Wilson,RO-3-1,WW_RO-3-1,Plainview
+154,2,Warnica-Wilson,RO-34,WW_RO-34,Plainview
+155,2,Warnica-Wilson,RO-4-70-1,WW_RO-4-70-1,Plainview
+156,2,Warnica-Wilson,RO-5-1,WW_RO-5-1,Plainview
+157,2,Warnica-Wilson,RO-62-1,WW_RO-62-1,Plainview
+158,2,Warnica-Wilson,RO-79,WW_RO-79,Plainview
+159,2,Warnica-Wilson,RO-7B-1,WW_RO-7B-1,Plainview
+160,2,Warnica-Wilson,RO-7,WW_RO-7,Plainview
