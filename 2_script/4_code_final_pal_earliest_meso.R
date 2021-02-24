@@ -24,11 +24,14 @@ if (!requireNamespace("ggtree", quietly = TRUE)){
 
 rm(list=ls())
 
+output_folder <- file.path(".", "3_output", "final_palaeolithic_earliest_mesolithic_tanged_points")
+dir.create(output_folder,
+           recursive = T)
 
 
-tanged_points_tps <- Momocs::import_tps("./1_data/TPS_TP_27_09_2019.TPS", 
+tanged_points_tps <- Momocs::import_tps(file.path(".", "1_data", "TPS_TP_27_09_2019.TPS"), 
                                         curves = TRUE)
-tanged_points <- readr::read_csv("./1_data/tanged.points.csv",
+tanged_points <- readr::read_csv(file.path(".", "1_data", "tanged.points.csv"),
                                  col_types = cols(Context = col_character(),
                                                   Site = col_character()))
 
@@ -63,7 +66,7 @@ names(occurences_TP_NAT_subset) <- c("NAT", "n")
 occurences_TP_NAT_subset
 
 readr::write_csv(occurences_TP_NAT_subset, 
-                 "./3_output/final_palaeolithic_earliest_mesolithic_tanged_points/occurences_TP_NAT_subset.csv")
+                 file.path(output_folder, "occurences_TP_NAT_subset.csv"))
 
 # unique chronozones
 unique(outlinetpNAT_subset$fac$`Chronozone (Relative)`)
@@ -115,7 +118,7 @@ print(table_TP_chronozone_x_nat)
   minimum_no_of_pcs_tanged_points_PCA <- ncol(tanged_points_PCA$x)
   
   # ggsave(plot = scree_plot,
-  #        filename = "./3_output/final_palaeolithic_earliest_mesolithic_tanged_points/PCA_screeplot.svg",
+  #        filename = file.path(output_folder, "PCA_screeplot.svg"),
   #        device = "svg",
   #        width = 20,
   #        height = 15,
@@ -132,7 +135,7 @@ print(table_TP_chronozone_x_nat)
           axis.text.y=element_blank(),
           axis.ticks.y=element_blank())
   # ggsave(plot = pc_contrib_plot,
-  #        filename = "./3_output/final_palaeolithic_earliest_mesolithic_tanged_points/PCA_contrib.svg",
+  #        filename = file.path(output_folder, "PCA_contrib.svg"),
   #        device = "svg",
   #        width = 5,
   #        height = 7,
@@ -182,13 +185,17 @@ print(table_TP_chronozone_x_nat)
   height_silhouette_plot <- 100
   width_silhouette_plot <- 100
   
+  output_folder_ward <- file.path(output_folder, "Ward")
+  dir.create(output_folder_ward,
+             recursive = T)
+
   ggsave(silhouette_plot,
-         filename = "./3_output/final_palaeolithic_earliest_mesolithic_tanged_points/Ward/silhouette_plot_NbClust_wardD2.svg",
+         filename = file.path(output_folder_ward, "silhouette_plot_NbClust_wardD2.svg"),
          height  = height_silhouette_plot,
          width = width_silhouette_plot,
          units = "mm")
   ggsave(silhouette_plot,
-         filename = "./3_output/final_palaeolithic_earliest_mesolithic_tanged_points/Ward/silhouette_plot_NbClust_wardD2.png",
+         filename = file.path(output_folder_ward, "silhouette_plot_NbClust_wardD2.png"),
          height  = height_silhouette_plot,
          width = width_silhouette_plot,
          units = "mm")
@@ -219,9 +226,9 @@ print(table_TP_chronozone_x_nat)
     current_algorithms_clustering <- chosen_TP_list_different_clustering_methods[[current_algorithm_name]]
     
     
-    TP_algorithm_folder <- paste0("./3_output/final_palaeolithic_earliest_mesolithic_tanged_points/", current_algorithm_name, "/")
+    TP_algorithm_folder <- file.path(output_folder, current_algorithm_name)
     dir.create(TP_algorithm_folder)
-    TP_algorithm_pathname <- paste0(TP_algorithm_folder, current_algorithm_name, "_clusters_k", n_clusters_tanged_points_PCA,"_no_outliers/")
+    TP_algorithm_pathname <- file.path(TP_algorithm_folder, paste0(current_algorithm_name, "_clusters_k", n_clusters_tanged_points_PCA,"_no_outliers"))
     dir.create(path = TP_algorithm_pathname)
     
     
@@ -297,12 +304,12 @@ print(table_TP_chronozone_x_nat)
     height <- 380
     width <- 285
     ggsave(whole_grid,
-           filename = paste0(TP_algorithm_pathname, "whole_grid.svg"),
+           filename = file.path(TP_algorithm_pathname, "whole_grid.svg"),
            height  = height,
            width = width,
            units = "mm")
     ggsave(whole_grid,
-           filename = paste0(TP_algorithm_pathname, "whole_grid.png"),
+           filename = file.path(TP_algorithm_pathname, "whole_grid.png"),
            height  = height,
            width = width,
            units = "mm")
@@ -312,14 +319,14 @@ print(table_TP_chronozone_x_nat)
     ##############
     
     
-    TP_algorithm_pathname_panel <- paste0(TP_algorithm_pathname, "panels/")
-    TP_algorithm_pathname_means <- paste0(TP_algorithm_pathname, "means/")
+    TP_algorithm_pathname_panel <- file.path(TP_algorithm_pathname, "panels")
+    TP_algorithm_pathname_means <- file.path(TP_algorithm_pathname, "means")
     
     dir.create(path = TP_algorithm_pathname_panel)
     dir.create(path = TP_algorithm_pathname_means)
     
     # PCA pairs plot colored by current algorithm cluster
-    png(file=paste0(TP_algorithm_pathname, "pairs_PCA_w_k", n_clusters_tanged_points_PCA, ".png"),
+    png(file=file.path(TP_algorithm_pathname, paste0("pairs_PCA_w_k", n_clusters_tanged_points_PCA, ".png")),
         width = 800, height = 600, units = "px")
     pairs(chosen_TP_w_cluster_PCA$x[,c(1:5)],
           col = tanged_points_PCA_colors[chosen_TP_w_cluster_PCA$fac$cluster],
@@ -328,7 +335,7 @@ print(table_TP_chronozone_x_nat)
           lower.panel = NULL)
     dev.off()
     
-    svg(file=paste0(TP_algorithm_pathname, "pairs_PCA_w_k", n_clusters_tanged_points_PCA, ".svg"),
+    svg(file=file.path(TP_algorithm_pathname, paste0("pairs_PCA_w_k", n_clusters_tanged_points_PCA, ".svg")),
         width = 8, height = 6)
     pairs(chosen_TP_w_cluster_PCA$x[,c(1:5)],
           col = tanged_points_PCA_colors[chosen_TP_w_cluster_PCA$fac$cluster],
@@ -338,7 +345,7 @@ print(table_TP_chronozone_x_nat)
     dev.off()
     
     
-    svg(file=paste0(TP_algorithm_pathname, "PCA_w_k", n_clusters_tanged_points_PCA, ".svg"),
+    svg(file=file.path(TP_algorithm_pathname, paste0("PCA_w_k", n_clusters_tanged_points_PCA, ".svg")),
         width = 8, height = 6)
     plot(chosen_TP_w_cluster_PCA$x[,1],
          chosen_TP_w_cluster_PCA$x[,2],
@@ -357,7 +364,7 @@ print(table_TP_chronozone_x_nat)
     # panels for each cluster
     for (i in 1:n_clusters_tanged_points_PCA){
       
-      mypath_png <- paste0(TP_algorithm_pathname_panel, "chosen_TP_w_cluster_colors_cluster_", i, ".png")
+      mypath_png <- file.path(TP_algorithm_pathname_panel, paste0("chosen_TP_w_cluster_colors_cluster_", i, ".png"))
       
       png(file=mypath_png,
           width = 800, height = 800, units = "px")
@@ -369,7 +376,7 @@ print(table_TP_chronozone_x_nat)
       dev.off()
       
       
-      mypath_svg <- paste0(TP_algorithm_pathname_panel, "chosen_TP_w_cluster_colors_cluster_", i, ".svg")
+      mypath_svg <- file.path(TP_algorithm_pathname_panel, paste0("chosen_TP_w_cluster_colors_cluster_", i, ".svg"))
       
       svg(file=mypath_svg, width = 8, height = 8)
       
@@ -412,7 +419,7 @@ print(table_TP_chronozone_x_nat)
     
     for (i in 1:n_clusters_tanged_points_PCA){
       
-      mypath_png <- paste0(TP_algorithm_pathname_means, paste0("Cluster ", i, " (n=",table(current_treecut$cluster)[[i]], ")"), "_mean_shp.png")
+      mypath_png <- file.path(TP_algorithm_pathname_means, paste0("Cluster ", i, " (n=",table(current_treecut$cluster)[[i]], ")_mean_shp.png"))
       
       png(file=mypath_png,
           width = 800, height = 800, units = "px")
@@ -423,7 +430,7 @@ print(table_TP_chronozone_x_nat)
       
       dev.off()
       
-      mypath_svg <- paste0(TP_algorithm_pathname_means, paste0("Cluster ", i, " (n=",table(current_treecut$cluster)[[i]], ")"), "_mean_shp.svg")
+      mypath_svg <- file.path(TP_algorithm_pathname_means, paste0("Cluster ", i, " (n=",table(current_treecut$cluster)[[i]], ")_mean_shp.svg"))
       
       svg(file=mypath_svg, width = 8, height = 8)
       
@@ -452,12 +459,12 @@ print(table_TP_chronozone_x_nat)
       current_pruned_tree <- ggtree(current_algorithms_clustering_cuttree, 
                                     layout = "rectangular") + 
         xlim(NA,6) +
-        geom_tiplab(aes(image=paste0(TP_algorithm_pathname_means, label, "_mean_shp.png")), 
+        geom_tiplab(aes(image=file.path(TP_algorithm_pathname_means, paste0(label, "_mean_shp.png"))), 
                     geom="image", offset=0.5, align=2, hjust = 0.5) + 
         geom_tiplab(geom='label', offset=1.5, hjust=.5, size = 5) + 
         geom_treescale()
       
-      ggsave(filename = paste0(TP_algorithm_pathname, current_algorithm_name, "_pruned_dendro.svg"),
+      ggsave(filename = file.path(TP_algorithm_pathname, paste0(current_algorithm_name, "_pruned_dendro.svg")),
              plot = current_pruned_tree,
              device = "svg",
              width = 25,
@@ -500,13 +507,13 @@ print(table_TP_chronozone_x_nat)
       ylab("Latitude") +
       theme(legend.position = "none")
     
-    ggsave(filename = paste0(TP_algorithm_pathname, "distribution_map_", current_algorithm_name, ".svg"),
+    ggsave(filename = file.path(TP_algorithm_pathname, paste0("distribution_map_", current_algorithm_name, ".svg")),
            plot = current_distribution_map,
            device = "svg",
            width = 30,
            height = 25,
            units = "cm")
-    ggsave(filename = paste0(TP_algorithm_pathname, "distribution_map_", current_algorithm_name, ".png"),
+    ggsave(filename = file.path(TP_algorithm_pathname, paste0("distribution_map_", current_algorithm_name, ".png")),
            plot = current_distribution_map,
            device = "png",
            width = 30,
@@ -520,7 +527,7 @@ print(table_TP_chronozone_x_nat)
   
   ######################### NJ ##################
   
-  chronozones_TP <- as.data.frame(read_csv("./1_data/chronozones_TP.csv", 
+  chronozones_TP <- as.data.frame(read_csv(file.path(".","1_data","chronozones_TP.csv"), 
                                            col_types = cols(Chronozone_order = col_factor(levels = c("1", "2", "3")))))
   chronozones_TP$Chronozone <- factor(chronozones_TP$Chronozone)
   tanged_points_PCA_chronozones <- tanged_points_PCA
@@ -555,12 +562,12 @@ print(table_TP_chronozone_x_nat)
   NJ_TP_gheatmap_width <- 15
   
   ggsave(NJ_TP_gheatmap,
-         filename = "./3_output/final_palaeolithic_earliest_mesolithic_tanged_points/NJ_with_heatmap_chronozones.svg",
+         filename = file.path(output_folder, "NJ_with_heatmap_chronozones.svg"),
          width = NJ_TP_gheatmap_width,
          height = NJ_TP_gheatmap_height,
          units = "in")
   ggsave(NJ_TP_gheatmap,
-         filename = "./3_output/final_palaeolithic_earliest_mesolithic_tanged_points/NJ_with_heatmap_chronozones.png",
+         filename = file.path(output_folder, "NJ_with_heatmap_chronozones.png"),
          width = NJ_TP_gheatmap_width,
          height = NJ_TP_gheatmap_height,
          units = "in")

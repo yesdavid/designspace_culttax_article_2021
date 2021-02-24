@@ -11,7 +11,7 @@ rm(list=ls())
 
 #### BUCHANAN ET AL.
 # load outlines
-outlines_combined_buchanan <- readRDS("./1_data/outlines_combined_goshen_plainview.RDS")
+outlines_combined_buchanan <- readRDS(file.path(".", "1_data", "outlines_combined_goshen_plainview.RDS"))
 # rename artefact names to match spreadsheet
 buchanan_names <- list()
 for (i in 1:length(outlines_combined_buchanan$coo)){
@@ -19,7 +19,7 @@ for (i in 1:length(outlines_combined_buchanan$coo)){
 }
 names(outlines_combined_buchanan$coo) <- as.vector(do.call(rbind, buchanan_names))
 # load spreadsheet
-buchanan_supp <- as.data.frame(readr::read_csv("./1_data/Buchanan_et_al_AA_Supp_Mats_edited.csv",
+buchanan_supp <- as.data.frame(readr::read_csv(file.path(".", "1_data", "Buchanan_et_al_AA_Supp_Mats_edited.csv"),
                                                col_types = cols(prev_assigned_type = col_factor(levels = c("Goshen", "Plainview")))))
 # add spreadsheet data to outlines
 outlines_combined_buchanan <- Momocs::Out(outlines_combined_buchanan$coo,
@@ -28,15 +28,15 @@ outlines_combined_buchanan <- Momocs::Out(outlines_combined_buchanan$coo,
 
 #### PETRIK ET AL.
 # load outlines
-outlines_combined_petrik <- readRDS(file ="./1_data/outlines_combined_petrik_2018.RDS")
+outlines_combined_petrik <- readRDS(file = file.path(".", "1_data", "outlines_combined_petrik_2018.RDS"))
 
 
 #### NICOLAS
 # load outlines
-outlines_combined_nicolas <- readRDS(file ="./1_data/outlines_combined_nicholas_2016.RDS")
+outlines_combined_nicolas <- readRDS(file = file.path(".", "1_data", "outlines_combined_nicholas_2016.RDS"))
 
 # unification of outlines with catalogue-dataframe
-nicolas_fleches_2016_catalog_ids_coordinates <- readr::read_csv(file = "./1_data/nicolas_fleches_2016_catalog_ids_with_coordinates.csv")
+nicolas_fleches_2016_catalog_ids_coordinates <- readr::read_csv(file = file.path(".", "1_data", "nicolas_fleches_2016_catalog_ids_with_coordinates.csv"))
 
 outlines_combined_nicolas_2016_names <- names(outlines_combined_nicolas)
 outlines_combined_nicolas_2016_names_splitted <- strsplit(outlines_combined_nicolas_2016_names, split = "_")
@@ -71,10 +71,10 @@ outlines_nicolas_fr <- Momocs::filter(outlines_combined_nicolas_fac,
 
 #### Tanged points
 # load outlines
-tanged_points_tps <- Momocs::import_tps("./1_data/TPS_TP_27_09_2019.TPS", 
+tanged_points_tps <- Momocs::import_tps(file.path(".", "1_data", "TPS_TP_27_09_2019.TPS"), 
                                         curves = TRUE)
 
-tanged_points <- readr::read_csv("./1_data/tanged.points.csv",
+tanged_points <- readr::read_csv(file.path(".", "1_data", "tanged.points.csv"),
                                  col_types = cols(Context = col_character(),
                                                   Site = col_character()))
 # subset
@@ -341,7 +341,7 @@ d <- a + aes(x = PC1, y = PC4) +
 cowplot::plot_grid(b,c,d,pc_contrib_plot)
 
 ######################################################
-# hard time bins based on our arbitrary time slices
+# custom bins based on region
 rownames_DATASETS <- list()
 for(i in unique(all_outlines_OUT_PCA_df$Dataset)){
   rownames_DATASETS[[i]] <- as.character(subset(all_outlines_OUT_centered_scaled_PCA$fac, Dataset == i)$ID)
@@ -374,13 +374,13 @@ disparity_df_list <- list()
 for(i in TS_names){
 
   if (i == "Palaeoindian" || i == "Bell Beaker CZ" || i == "Tanged points"){
-    disparity_df_list[[i]] <- data.frame(Timebin = paste0(i, 
+    disparity_df_list[[i]] <- data.frame(Subset = paste0(i, 
                                                           "\n(n=",nrow(TS_disp$subsets[[i]]$elements),")"),
                                          disparity = as.vector(TS_disp$disparity[[i]][[2]]),
                                          nelements = nrow(TS_disp$subsets[[i]]$elements),
                                          TS = i)
   } else {
-    disparity_df_list[[i]] <- data.frame(Timebin = paste0(i, 
+    disparity_df_list[[i]] <- data.frame(Subset = paste0(i, 
                                                           " (n=",nrow(TS_disp$subsets[[i]]$elements),")"),
                                          disparity = as.vector(TS_disp$disparity[[i]][[2]]),
                                          nelements = nrow(TS_disp$subsets[[i]]$elements),
@@ -390,7 +390,7 @@ for(i in TS_names){
 }
 disparity_df_TSdiscrete_armatureOutlines_perTShard <- do.call(rbind.data.frame, disparity_df_list)
 
-disparity_TSdiscrete_armatureOutlines_ggplot_perTShard <- ggplot(data = disparity_df_TSdiscrete_armatureOutlines_perTShard, aes(x = Timebin, y = disparity)) +
+disparity_TSdiscrete_armatureOutlines_ggplot_perTShard <- ggplot(data = disparity_df_TSdiscrete_armatureOutlines_perTShard, aes(x = Subset, y = disparity)) +
   geom_violin() + 
   geom_boxplot(notch = T, width = 0.1, aes(fill = TS)) +
   theme_bw() +
@@ -413,12 +413,12 @@ whole_grid
 height <- 380
 width <- 285
 # ggsave(whole_grid,
-#        filename = "./3_output/whole_grid_resampled_by_region.svg",
+#        filename = file.path(".", "3_output", "whole_grid_resampled_by_region.svg"),
 #        height  = height,
 #        width = width,
 #        units = "mm")
 # ggsave(whole_grid,
-#        filename = "./3_output/whole_grid_resampled_by_region.png",
+#        filename = file.path(".", "3_output", "whole_grid_resampled_by_region.png"),
 #        height  = height,
 #        width = width,
 #        units = "mm")

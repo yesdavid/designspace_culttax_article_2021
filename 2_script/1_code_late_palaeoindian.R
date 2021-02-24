@@ -12,11 +12,13 @@ library(psych)
 
 rm(list=ls())
 
-
+output_folder <- file.path("./3_output/late_palaeoindian_bifac_points")
+dir.create(output_folder,
+           recursive = T)
 
 
 # load outlines
-outlines_combined_buchanan <- readRDS("./1_data/outlines_combined_goshen_plainview.RDS")
+outlines_combined_buchanan <- readRDS(file.path("./1_data/outlines_combined_goshen_plainview.RDS"))
 
 # rename artefact names to match spreadsheet
 buchanan_names <- list()
@@ -26,7 +28,7 @@ for (i in 1:length(outlines_combined_buchanan$coo)){
 names(outlines_combined_buchanan$coo) <- as.vector(do.call(rbind, buchanan_names))
 
 # load spreadsheet
-buchanan_supp <- as.data.frame(readr::read_csv("./1_data/Buchanan_et_al_AA_Supp_Mats_edited.csv",
+buchanan_supp <- as.data.frame(readr::read_csv(file.path("./1_data/Buchanan_et_al_AA_Supp_Mats_edited.csv"),
                                                col_types = cols(prev_assigned_type = col_factor(levels = c("Goshen", "Plainview")))))
 
 # add spreadsheet data to outlines
@@ -73,14 +75,14 @@ minimum_no_of_pcs_buchanan # to describe 95% of the data's variability
 buchanan_screeplot <- Momocs::scree_plot(outlines_combined_buchanan_centered_scaled_PCA,
                    nax = 1:8) + theme_bw()
 ggsave(buchanan_screeplot,
-       filename = "./3_output/late_palaeoindian_bifac_points/buchanan_screeplot.svg",
+       filename = file.path("./3_output/late_palaeoindian_bifac_points/buchanan_screeplot.svg"),
        width = 7,
        height = 5,
        dpi = 320,
        units = "in",
        device = "svg")
 ggsave(buchanan_screeplot,
-       filename = "./3_output/late_palaeoindian_bifac_points/buchanan_screeplot.png",
+       filename = file.path("./3_output/late_palaeoindian_bifac_points/buchanan_screeplot.png"),
        width = 7,
        height = 5,
        dpi = 320,
@@ -101,14 +103,14 @@ buchanan_outline_analysis_shp_variation_plot <- buchanan_outline_analysis_shp_va
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())
 ggsave(buchanan_outline_analysis_shp_variation_plot,
-       filename = "./3_output/late_palaeoindian_bifac_points/buchanan_outline_analysis_shp_variation_plot.svg",
+       filename = file.path("./3_output/late_palaeoindian_bifac_points/buchanan_outline_analysis_shp_variation_plot.svg"),
          width = 7,
        height = 5,
        dpi = 320,
        units = "in",
        device = "svg")
 ggsave(buchanan_outline_analysis_shp_variation_plot,
-       filename = "./3_output/late_palaeoindian_bifac_points/buchanan_outline_analysis_shp_variation_plot.png",
+       filename = file.path("./3_output/late_palaeoindian_bifac_points/buchanan_outline_analysis_shp_variation_plot.png"),
        width = 7,
        height = 5,
        dpi = 320,
@@ -145,14 +147,14 @@ PCA_plot_GoshenPlainview <- ggplot(data = buchanan_PCA_data_names, aes(x = PC1, 
 PCA_plot_GoshenPlainview
 
 ggsave(PCA_plot_GoshenPlainview,
-       filename = "./3_output/late_palaeoindian_bifac_points/PCA_plot_GoshenPlainview.svg",
+       filename = file.path("./3_output/late_palaeoindian_bifac_points/PCA_plot_GoshenPlainview.svg"),
          width = 7,
        height = 5,
        dpi = 320,
        units = "in",
        device = "svg")
 ggsave(PCA_plot_GoshenPlainview,
-       filename = "./3_output/late_palaeoindian_bifac_points/PCA_plot_GoshenPlainview.png",
+       filename = file.path("./3_output/late_palaeoindian_bifac_points/PCA_plot_GoshenPlainview.png"),
        width = 7,
        height = 5,
        dpi = 320,
@@ -350,13 +352,13 @@ buchanan_klingenberg_hist <- ggplot(sqrt_of_standardized_and_squared_scores_summ
            label = paste0("Mann-Whitney-U test:\nW = ", buchanan_relat_shp_diff_mannwhitney$statistic[[1]],", p = ", round(buchanan_relat_shp_diff_mannwhitney$p.value, digits = 3))) + 
   theme_bw()
 
-ggsave(filename = "./3_output/late_palaeoindian_bifac_points/buchanan_pca_rel_shp_klingenberg_hist.svg",
+ggsave(filename = file.path("./3_output/late_palaeoindian_bifac_points/buchanan_pca_rel_shp_klingenberg_hist.svg"),
        plot = buchanan_klingenberg_hist,
        device = "svg",
        width = 10,
        height = 10,
        dpi = "retina")
-ggsave(filename = "./3_output/late_palaeoindian_bifac_points/buchanan_pca_rel_shp_klingenberg_hist.png",
+ggsave(filename = file.path("./3_output/late_palaeoindian_bifac_points/buchanan_pca_rel_shp_klingenberg_hist.png"),
        plot = buchanan_klingenberg_hist,
        device = "png",
        width = 10,
@@ -367,13 +369,13 @@ ggsave(filename = "./3_output/late_palaeoindian_bifac_points/buchanan_pca_rel_sh
 buchanan_klingenberg_hist_descr <- buchanan_klingenberg_hist +
   labs(caption = paste0("Distribution of measure of relative shape distance (Klingenberg and Monteiro, 2005) between Goshen (n=", nrow(buchanan_PCA_data_GOSHEN), ") and Plainview (n=", nrow(buchanan_PCA_data_PLAINVIEW), ") type outlines."))
 
-ggsave(filename = "./3_output/late_palaeoindian_bifac_points/buchanan_pca_rel_shp_klingenberg_hist_descr.svg",
+ggsave(filename = file.path("./3_output/late_palaeoindian_bifac_points/buchanan_pca_rel_shp_klingenberg_hist_descr.svg"),
        plot = buchanan_klingenberg_hist_descr,
        device = "svg",
        width = 10,
        height = 10,
        dpi = "retina")
-ggsave(filename = "./3_output/late_palaeoindian_bifac_points/buchanan_pca_rel_shp_klingenberg_hist_descr.png",
+ggsave(filename = file.path("./3_output/late_palaeoindian_bifac_points/buchanan_pca_rel_shp_klingenberg_hist_descr.png"),
        plot = buchanan_klingenberg_hist_descr,
        device = "png",
        width = 10,

@@ -25,7 +25,12 @@ if (!requireNamespace("ggtree", quietly = TRUE)){
 rm(list=ls())
 
 
-outlines_combined_nicolas_2016 <- readRDS(file ="./1_data/outlines_combined_nicholas_2016.RDS")
+output_folder <- file.path(".", "3_output", "late_neolithic_early_bronze_age_arrowheads")
+dir.create(output_folder,
+           recursive = T)
+
+
+outlines_combined_nicolas_2016 <- readRDS(file = file.path(".", "1_data", "outlines_combined_nicholas_2016.RDS"))
 
 
 outlines_combined_nicolas_2016_centered <- Momocs::coo_centre(outlines_combined_nicolas_2016) # center
@@ -36,7 +41,7 @@ outlines_combined_nicolas_2016_centered_scaled <- Momocs::coo_slidedirection(out
 
 
 # unification of outlines with catalogue-dataframe
-nicolas_fleches_2016_catalog_ids_coordinates <- readr::read_csv(file = "./1_data/nicolas_fleches_2016_catalog_ids_with_coordinates.csv")
+nicolas_fleches_2016_catalog_ids_coordinates <- readr::read_csv(file = file.path(".", "1_data", "nicolas_fleches_2016_catalog_ids_with_coordinates.csv"))
 
 outlines_combined_nicolas_2016_names <- names(outlines_combined_nicolas_2016_centered_scaled)
 outlines_combined_nicolas_2016_names_splitted <- strsplit(outlines_combined_nicolas_2016_names, split = "_")
@@ -93,7 +98,7 @@ col.group <- c(rep("skyblue2", times=length(which(outlines_combined_nicolas_2016
                rep("green2", times=length(which(outlines_combined_nicolas_2016_centered_scaled_PCA$fac$country == "United Kingdom"))))
 
 # plot
-svg("./3_output/late_neolithic_early_bronze_age_arrowheads/nicolas_2016_pca_w_outlier_names.svg",
+svg(file.path(output_folder, "nicolas_2016_pca_w_outlier_names.svg"),
     width = 8,
     height = 8)
 plot(outlines_combined_nicolas_2016_centered_scaled_PCA$x[,1],
@@ -144,7 +149,8 @@ for (vector_index in 1:length(match(nicolas_outliers_cluster_outlier_names$name,
 
 
 # look at the shape of the outliers
-nicolas_2016_with_outliers <- Momocs::slice(outlines_combined_nicolas_2016_centered_scaled, match(nicolas_outliers_cluster_outlier_names$name, outlines_combined_nicolas_2016_centered_scaled_PCA$fac$ID_artefact))
+nicolas_2016_with_outliers <- Momocs::slice(outlines_combined_nicolas_2016_centered_scaled, 
+                                            match(nicolas_outliers_cluster_outlier_names$name, outlines_combined_nicolas_2016_centered_scaled_PCA$fac$ID_artefact))
 
 Momocs::panel(nicolas_2016_with_outliers,
               fac = "country_code",
@@ -152,8 +158,8 @@ Momocs::panel(nicolas_2016_with_outliers,
               col = "grey")
 
 # analysis without outliers
-
-nicolas_2016_without_outliers <- Momocs::slice(outlines_combined_nicolas_2016_centered_scaled, -match(nicolas_outliers_cluster_outlier_names$name, outlines_combined_nicolas_2016_centered_scaled_PCA$fac$ID_artefact))
+nicolas_2016_without_outliers <- Momocs::slice(outlines_combined_nicolas_2016_centered_scaled, 
+                                               -match(nicolas_outliers_cluster_outlier_names$name, outlines_combined_nicolas_2016_centered_scaled_PCA$fac$ID_artefact))
 
 
 # harmonic calibration
@@ -168,12 +174,12 @@ nicolas_2016_without_outliers_efourier <- Momocs::efourier(nicolas_2016_without_
 nicolas_2016_without_outliers_PCA <- Momocs::PCA(nicolas_2016_without_outliers_efourier) # PCA on Coe objects, using prcomp.
 
 nicolas_2016_screeplot_wo_outliers <- Momocs::scree_plot(nicolas_2016_without_outliers_PCA, nax = 1:8)
-ggsave(filename = "./3_output/late_neolithic_early_bronze_age_arrowheads/nicolas_2016_screeplot_wo_outliers.svg",
+ggsave(filename = file.path(output_folder, "nicolas_2016_screeplot_wo_outliers.svg"),
        nicolas_2016_screeplot_wo_outliers,
        width = 20,
        height = 20,
        units = "cm")
-ggsave(filename = "./3_output/late_neolithic_early_bronze_age_arrowheads/nicolas_2016_screeplot_wo_outliers.png",
+ggsave(filename = file.path(output_folder, "nicolas_2016_screeplot_wo_outliers.png"),
        nicolas_2016_screeplot_wo_outliers,
        width = 20,
        height = 20,
@@ -193,12 +199,12 @@ gg_nicolas <- gg_nicolas$gg +
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank())
 
-ggsave(filename = "./3_output/late_neolithic_early_bronze_age_arrowheads/nicolas_2016_pca_variance.svg",
+ggsave(filename = file.path(output_folder, "nicolas_2016_pca_variance.svg"),
        gg_nicolas,
        width = 20,
        height = 20,
        units = "cm")
-ggsave(filename = "./3_output/late_neolithic_early_bronze_age_arrowheads/nicolas_2016_pca_variance.png",
+ggsave(filename = file.path(output_folder, "nicolas_2016_pca_variance.png"),
        gg_nicolas,
        width = 20,
        height = 20,
@@ -213,7 +219,7 @@ col.group <- c(rep("skyblue2", times=length(which(nicolas_2016_without_outliers_
                rep("gold", times=length(which(nicolas_2016_without_outliers_PCA$fac$country == "France"))),
                rep("green2", times=length(which(nicolas_2016_without_outliers_PCA$fac$country == "United Kingdom"))))
 
-svg("./3_output/late_neolithic_early_bronze_age_arrowheads/nicolas_2016_pca_without_outlier_names.svg",
+svg(file.path(output_folder, "nicolas_2016_pca_without_outlier_names.svg"),
     width = 8, height = 8)
 # plot
 plot(nicolas_2016_without_outliers_PCA$x[,1],
@@ -283,13 +289,17 @@ cowplot::plot_grid(silhouette_plot, gap_plot)
 height_silhouette_plot <- 100
 width_silhouette_plot <- 100
 
+wards_method_path <- file.path(output_folder, "Ward")
+dir.create(wards_method_path,
+           recursive = T)
+
 ggsave(silhouette_plot,
-       filename = "./3_output/late_neolithic_early_bronze_age_arrowheads/Ward/silhouette_plot_NbClust_wardD2.svg",
+       filename = file.path(wards_method_path, "silhouette_plot_NbClust_wardD2.svg"),
        height  = height_silhouette_plot,
        width = width_silhouette_plot,
        units = "mm")
 ggsave(silhouette_plot,
-       filename = "./3_output/late_neolithic_early_bronze_age_arrowheads/Ward/silhouette_plot_NbClust_wardD2.png",
+       filename = file.path(wards_method_path, "silhouette_plot_NbClust_wardD2.png"),
        height  = height_silhouette_plot,
        width = width_silhouette_plot,
        units = "mm")
@@ -349,22 +359,22 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
   # panel plots by cluster without outliers
   ##############
   
-  nicolas_algorithm_folder <- paste0("./3_output/late_neolithic_early_bronze_age_arrowheads/", current_algorithm_name, "/")
+  nicolas_algorithm_folder <- file.path(output_folder, current_algorithm_name)
   dir.create(nicolas_algorithm_folder)
   
   ape::write.nexus(ape::as.phylo(current_algorithms_clustering),
-                   file = paste0(nicolas_algorithm_folder, current_algorithm_name, "_full_tree.tre"))
+                   file = file.path(nicolas_algorithm_folder, paste0(current_algorithm_name, "_full_tree.tre")))
   
-  nicolas_algorithm_pathname <- paste0(nicolas_algorithm_folder, current_algorithm_name, "_clusters_k", n_clusters_nicolas_2016_without_outliers,"_no_outliers/")
-  nicolas_algorithm_pathname_panel <- paste0(nicolas_algorithm_pathname, "panels/")
-  nicolas_algorithm_pathname_means <- paste0(nicolas_algorithm_pathname, "means/")
+  nicolas_algorithm_pathname <- file.path(nicolas_algorithm_folder, paste0(current_algorithm_name, "_clusters_k", n_clusters_nicolas_2016_without_outliers,"_no_outliers"))
+  nicolas_algorithm_pathname_panel <- file.path(nicolas_algorithm_pathname, "panels")
+  nicolas_algorithm_pathname_means <- file.path(nicolas_algorithm_pathname, "means")
   
   dir.create(path = nicolas_algorithm_pathname)
   dir.create(path = nicolas_algorithm_pathname_panel)
   dir.create(path = nicolas_algorithm_pathname_means)
   
   # PCA colored by current algorithm cluster
-  png(file=paste0(nicolas_algorithm_pathname, "pairs_PCA_w_k", n_clusters_nicolas_2016_without_outliers),
+  png(file=file.path(nicolas_algorithm_pathname, paste0("pairs_PCA_w_k", n_clusters_nicolas_2016_without_outliers)),
       width = 800, height = 600, units = "px")
   pairs(nicolas_2016_without_outliers_w_cluster_PCA$x[,c(1:5)],
         col = nicolas_colors_without_outliers[nicolas_2016_without_outliers_w_cluster_PCA$fac$cluster],
@@ -373,7 +383,7 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
         lower.panel = NULL)
   dev.off()
   
-  svg(file=paste0(nicolas_algorithm_pathname, "PCA_w_k", n_clusters_nicolas_2016_without_outliers, ".svg"),
+  svg(file=file.path(nicolas_algorithm_pathname, paste0("PCA_w_k", n_clusters_nicolas_2016_without_outliers, ".svg")),
       width = 8, height = 6)
   plot(nicolas_2016_without_outliers_w_cluster_PCA$x[,1],
        nicolas_2016_without_outliers_w_cluster_PCA$x[,2],
@@ -392,7 +402,7 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
   # panels for each cluster
   for (i in 1:n_clusters_nicolas_2016_without_outliers){
     
-    mypath_png <- paste0(nicolas_algorithm_pathname_panel, "nicolas_2016_without_outliers_w_cluster_colors_cluster_", i, ".png")
+    mypath_png <- file.path(nicolas_algorithm_pathname_panel, paste0("nicolas_2016_without_outliers_w_cluster_colors_cluster_", i, ".png"))
     
     png(file=mypath_png,
         width = 800, height = 800, units = "px")
@@ -403,7 +413,7 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
     
     dev.off()
     
-    mypath_svg <- paste0(nicolas_algorithm_pathname_panel, "nicolas_2016_without_outliers_w_cluster_colors_cluster_", i, ".svg")
+    mypath_svg <- file.path(nicolas_algorithm_pathname_panel, paste0("nicolas_2016_without_outliers_w_cluster_colors_cluster_", i, ".svg"))
     
     svg(file=mypath_svg, width = 8, height = 8)
     
@@ -446,7 +456,8 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
   
   for (i in 1:n_clusters_nicolas_2016_without_outliers){
     
-    mypath_png <- paste0(nicolas_algorithm_pathname_means, paste0("Cluster ", i, " (n=",colSums(table(current_treecut))[[i]], ")"), "_mean_shp.png")
+    mypath_png <- file.path(nicolas_algorithm_pathname_means, 
+                            paste0("Cluster ", i, " (n=",colSums(table(current_treecut))[[i]], ")_mean_shp.png"))
     
     png(file=mypath_png,
         width = 800, height = 800, units = "px")
@@ -458,7 +469,8 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
     dev.off()
     
     
-    mypath_svg <- paste0(nicolas_algorithm_pathname_means, paste0("Cluster ", i, " (n=",colSums(table(current_treecut))[[i]], ")"), "_mean_shp.svg")
+    mypath_svg <- file.path(nicolas_algorithm_pathname_means, 
+                            paste0("Cluster ", i, " (n=",colSums(table(current_treecut))[[i]], ")_mean_shp.svg"))
     
     svg(file=mypath_svg, width = 8, height = 8)
     
@@ -476,7 +488,7 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
                                                                  current_treecut, 
                                                                  k=n_clusters_nicolas_2016_without_outliers)
     ape::write.nexus(ape::as.phylo(current_algorithms_clustering_cuttree),
-                     file = paste0(nicolas_algorithm_folder, current_algorithm_name, "_pruned_tree.tre"))
+                     file = file.path(nicolas_algorithm_folder, paste0(current_algorithm_name, "_pruned_tree.tre")))
     
     ######################## change tip labels of chosen trees
     new_labels <- rep(NA, length(current_algorithms_clustering_cuttree$labels))
@@ -492,12 +504,12 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
     current_pruned_tree <- ggtree(current_algorithms_clustering_cuttree, 
                                   layout = "rectangular") + 
       xlim(NA,6) +
-      geom_tiplab(aes(image=paste0(nicolas_algorithm_pathname_means, label, "_mean_shp.png")), 
+      geom_tiplab(aes(image=file.path(nicolas_algorithm_pathname_means, paste0(label, "_mean_shp.png"))), 
                   geom="image", offset=0.5, align=2, hjust = 0.5) + 
       geom_tiplab(geom='label', offset=1.5, hjust=.5, size = 5) + 
       geom_treescale()
     
-    ggsave(filename = paste0(nicolas_algorithm_pathname, "pruned_dendro.svg"),
+    ggsave(filename = file.path(nicolas_algorithm_pathname, "pruned_dendro.svg"),
            plot = current_pruned_tree,
            device = "svg",
            width = 25,
@@ -548,13 +560,13 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
     ylab("Latitude") +
     theme(legend.position = "none")
   
-  ggsave(filename = paste0(nicolas_algorithm_pathname, "distribution_map_", current_algorithm_name, ".svg"),
+  ggsave(filename = file.path(nicolas_algorithm_pathname, paste0("distribution_map_", current_algorithm_name, ".svg")),
          plot = current_distribution_map,
          device = "svg",
          width = 30,
          height = 25,
          units = "cm")
-  ggsave(filename = paste0(nicolas_algorithm_pathname, "distribution_map_", current_algorithm_name, ".png"),
+  ggsave(filename = file.path(nicolas_algorithm_pathname, paste0("distribution_map_", current_algorithm_name, ".png")),
          plot = current_distribution_map,
          device = "png",
          width = 30,
@@ -569,7 +581,7 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
 ############################# NJ typochronology ############################# 
 
 
-typochronologie_csv <- readr::read_csv("./1_data/nicolas_2017_typochronologie.csv")
+typochronologie_csv <- readr::read_csv(file.path(".", "1_data", "nicolas_2017_typochronologie.csv"))
 
 typochronologie_csv <- dplyr::distinct(typochronologie_csv, ID_country, .keep_all = T)
 
@@ -627,13 +639,13 @@ NJ_nicolas_gheatmap_height <- 10
 NJ_nicolas_gheatmap_width <- 10
 
 ggsave(NJ_nicolas_gheatmap,
-       filename = "./3_output/late_neolithic_early_bronze_age_arrowheads/NJ_with_heatmap_periods.svg",
+       filename = file.path(output_folder, "NJ_with_heatmap_periods.svg"),
        width = NJ_nicolas_gheatmap_width,
        height = NJ_nicolas_gheatmap_height,
        device = "svg",
        units = "in")
 ggsave(NJ_nicolas_gheatmap,
-       filename = "./3_output/late_neolithic_early_bronze_age_arrowheads/NJ_with_heatmap_periods.png",
+       filename = file.path(output_folder, "NJ_with_heatmap_periods.png"),
        width = NJ_nicolas_gheatmap_width,
        height = NJ_nicolas_gheatmap_height,
        device = "png",

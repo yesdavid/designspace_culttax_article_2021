@@ -18,9 +18,12 @@ if (!requireNamespace("ggtree", quietly = TRUE)){
 
 rm(list=ls())
 
+output_folder <- file.path(".","3_output","czech_bell_beaker_arrowheads")
+dir.create(output_folder,
+           recursive = T)
 
 # load outlines
-outlines_combined_petrik <- readRDS(file ="./1_data/outlines_combined_petrik_2018.RDS")
+outlines_combined_petrik <- readRDS(file = file.path(".","1_data","outlines_combined_petrik_2018.RDS"))
 
 
 # GMM procedures
@@ -52,7 +55,7 @@ minimum_no_of_pcs_petrik
 petrik_screeplot <- Momocs::scree_plot(outlines_combined_petrik_centered_scaled_PCA,
                                        nax = 1:8)
 ggsave(petrik_screeplot,
-       filename = "./3_output/czech_bell_beaker_arrowheads/petrik_screeplot.png",
+       filename = file.path(output_folder, "petrik_screeplot.png"),
        width = 5,
        height = 5)
 
@@ -69,7 +72,7 @@ petrik_pccontrib <- gg$gg +
         axis.ticks.y=element_blank())
 
 ggsave(petrik_pccontrib,
-       filename = "./3_output/czech_bell_beaker_arrowheads/petrik_pccontrib.png",
+       filename = file.path(output_folder, "petrik_pccontrib.png"),
        width = 5,
        height = 5)
 
@@ -123,12 +126,12 @@ height_silhouette_plot <- 100
 width_silhouette_plot <- 100
 
 ggsave(silhouette_plot,
-       filename = "./3_output/czech_bell_beaker_arrowheads/silhouette_plot_NbClust_average.svg",
+       filename = file.path(output_folder, "silhouette_plot_NbClust_average.svg"),
        height  = height_silhouette_plot,
        width = width_silhouette_plot,
        units = "mm")
 ggsave(silhouette_plot,
-       filename = "./3_output/czech_bell_beaker_arrowheads/silhouette_plot_NbClust_average.png",
+       filename = file.path(output_folder, "silhouette_plot_NbClust_average.png"),
        height  = height_silhouette_plot,
        width = width_silhouette_plot,
        units = "mm")
@@ -153,9 +156,13 @@ outlines_combined_petrik_centered_scaled_w_cluster <- Momocs::Out(outlines_combi
 
 
 # # saves plot of each individual cluster with its respective artefacts
+upgma_path <- file.path(output_folder "petrik_clusters_panels_upgma")
+dir.create(upgma_path,
+           recursive = T)
+
 for (i in 1:n_clusters_petrik){
 
-  mypath <- paste0("./3_output/czech_bell_beaker_arrowheads/petrik_clusters_panels_upgma/", paste0("petrik_2018_upgma_k10_cluster_colors_cluster_", i), ".png")
+  mypath <- file.path(upgma_path, paste0("petrik_2018_upgma_k10_cluster_colors_cluster_", i, ".png"))
 
   png(file=mypath,
       width = 800, height = 800, units = "px")
@@ -211,7 +218,7 @@ PCA_plot_petrik_with_outliers <- ggplot(data = petrik_w_Cluster_PCA_names, aes(x
 
 
 ggsave(PCA_plot_petrik_with_outliers,
-       filename = "./3_output/czech_bell_beaker_arrowheads/PCA_plot_petrik_with_outliers.svg",
+       filename = file.path(output_folder, "PCA_plot_petrik_with_outliers.svg"),
        width = 7,
        height = 5,
        dpi = 320,
@@ -270,9 +277,14 @@ outlines_petrik_upgma_cuttree <- maptree::clip.clust(outlines_petrik_upgma,
                                                      k=n_clusters_petrik)
 
 # mean shapes
+
+mean_shapes_upgma_path <- file.path(output_folder, "petrik_clusters_mean_shapes_upgma")
+dir.create(mean_shapes_upgma_path,
+           recursive = T)
+
 for (i in 1:n_clusters_petrik){
   
-  mypath <- paste0("./3_output/czech_bell_beaker_arrowheads/petrik_clusters_mean_shapes_upgma/petrik_2018_w_cluster_upgma_colors_", paste0("Cluster ", i, " (n=",colSums(table(clusters_petrik_cutree_k10))[[i]], ")"), "_mean_shp.png")
+  mypath <- file.path(mean_shapes_upgma_path, paste0("petrik_2018_w_cluster_upgma_colors_", "Cluster ", i, " (n=",colSums(table(clusters_petrik_cutree_k10))[[i]], ")_mean_shp.png"))
   
   png(file=mypath,
       width = 800, height = 800, units = "px")
@@ -286,7 +298,7 @@ for (i in 1:n_clusters_petrik){
 layout = "circular"
 img_size <- 0.02
 tip_lab_size <- 3
-path_to_mean_shapes_petrik <- "./3_output/czech_bell_beaker_arrowheads/petrik_clusters_mean_shapes_upgma/petrik_2018_w_cluster_upgma_colors_"
+path_to_mean_shapes_petrik <- file.path(mean_shapes_upgma_path, "petrik_2018_w_cluster_upgma_colors_")
 
 
 
@@ -308,7 +320,7 @@ petrik_pruned_tree <- ggtree(outlines_petrik_upgma_cuttree,
   geom_tiplab(geom='label', offset=1, hjust=.5, size = 5) + 
   geom_treescale()
 
-ggsave(filename = paste0("./3_output/czech_bell_beaker_arrowheads/pruned_dendro_UPGMA_petrik_k_", n_clusters_petrik, ".svg"),
+ggsave(filename = file.path(output_folder, paste0("pruned_dendro_UPGMA_petrik_k_", n_clusters_petrik, ".svg")),
        plot = petrik_pruned_tree,
        device = "svg",
        width = 25,
@@ -434,10 +446,19 @@ petrik_without_outliers_w_Cluster <- Momocs::Out(petrik_without_outliers$coo,
 
 
 # saves plot of each individual Cluster with its respective artefacts
+
+path_no_outliers_upgma <- file.path(output_folder, "petrik_without_outliers_clusters_panels_upgma")
+dir.create(path_no_outliers_upgma,
+           recursive = T)
+
 for (i in 1:n_Clusters_petrik_without_outliers){
   
-  mypath_png <- paste0("./3_output/czech_bell_beaker_arrowheads/petrik_without_outliers_clusters_panels_upgma/", paste0("petrik_without_outliers_2018_upgma_k10_cluster_colors_cluster_", i), ".png")
-  mypath_svg <- paste0("./3_output/czech_bell_beaker_arrowheads/petrik_without_outliers_clusters_panels_upgma/", paste0("petrik_without_outliers_2018_upgma_k10_cluster_colors_cluster_", i), ".svg")
+  mypath_png <- file.path(path_no_outliers_upgma, 
+                       paste0("petrik_without_outliers_2018_upgma_k10_cluster_colors_cluster_", i, 
+                       ".png"))
+  mypath_svg <- file.path(path_no_outliers_upgma, 
+                       paste0("petrik_without_outliers_2018_upgma_k10_cluster_colors_cluster_", i, 
+                       ".svg"))
   
   png(file=mypath_png,
       width = 800, height = 800, units = "px")
@@ -502,7 +523,7 @@ PCA_plot_petrikWOoutliers <- ggplot(data = petrik_without_outliers_w_Cluster_PCA
 
 
 ggsave(PCA_plot_petrikWOoutliers,
-       filename = "./3_output/czech_bell_beaker_arrowheads/PCA_plot_petrikWOoutliers.svg",
+       filename = file.path(output_folder, "PCA_plot_petrikWOoutliers.svg"),
        width = 7,
        height = 5,
        dpi = 320,
@@ -545,10 +566,24 @@ outlines_petrik_without_outliers_upgma_cuttree <- maptree::clip.clust(outlines_p
                                                                       k=n_Clusters_petrik_without_outliers)
 
 # mean shapes
+path_petrik_without_outliers_clusters_mean_shapes_upgma <- file.path(output_folder, "petrik_without_outliers_clusters_mean_shapes_upgma")
+dir.create(path_petrik_without_outliers_clusters_mean_shapes_upgma,
+           recursive = T)
+
 for (i in 1:n_Clusters_petrik_without_outliers){
   
-  mypath_png <- paste0("./3_output/czech_bell_beaker_arrowheads/petrik_without_outliers_clusters_mean_shapes_upgma/petrik_without_outliers_2018_w_cluster_upgma_colors_", paste0("Cluster ", i, " (n=",colSums(table(Clusters_petrik_without_outliers_cutree))[[i]], ")"), "_mean_shp.png")
-  mypath_svg <- paste0("./3_output/czech_bell_beaker_arrowheads/petrik_without_outliers_clusters_mean_shapes_upgma/petrik_without_outliers_2018_w_cluster_upgma_colors_", paste0("Cluster ", i, " (n=",colSums(table(Clusters_petrik_without_outliers_cutree))[[i]], ")"), "_mean_shp.svg")
+  mypath_png <- file.path(path_petrik_without_outliers_clusters_mean_shapes_upgma,
+                          paste0("petrik_without_outliers_2018_w_cluster_upgma_colors_Cluster ", 
+                              i, 
+                              " (n=",
+                              colSums(table(Clusters_petrik_without_outliers_cutree))[[i]], 
+                              ")_mean_shp.png"))
+  mypath_svg <- file.path(path_petrik_without_outliers_clusters_mean_shapes_upgma,
+                          paste0("petrik_without_outliers_2018_w_cluster_upgma_colors_Cluster ", 
+                                 i, 
+                                 " (n=",
+                                 colSums(table(Clusters_petrik_without_outliers_cutree))[[i]], 
+                                 ")_mean_shp.svg"))
   
   png(file=mypath_png,
       width = 800, height = 800, units = "px")
@@ -568,7 +603,7 @@ for (i in 1:n_Clusters_petrik_without_outliers){
 layout = "circular"
 img_size <- 0.02
 tip_lab_size <- 3
-path_to_mean_shapes_petrik_without_outliers <- "./3_output/czech_bell_beaker_arrowheads/petrik_without_outliers_clusters_mean_shapes_upgma/petrik_without_outliers_2018_w_cluster_upgma_colors_"
+path_to_mean_shapes_petrik_without_outliers <- file.path(path_petrik_without_outliers_clusters_mean_shapes_upgma, "petrik_without_outliers_2018_w_cluster_upgma_colors_")
 
 
 
@@ -590,7 +625,10 @@ petrik_without_outliers_pruned_tree <- ggtree(outlines_petrik_without_outliers_u
   geom_treescale() +
   xlim(0,0.2)
 
-ggsave(filename = paste0("./3_output/czech_bell_beaker_arrowheads/pruned_dendro_UPGMA_petrik_without_outliers_k_", n_Clusters_petrik_without_outliers, ".svg"),
+ggsave(filename = file.path(output_folder,
+                            paste0("pruned_dendro_UPGMA_petrik_without_outliers_k_", 
+                                   n_Clusters_petrik_without_outliers, 
+                                   ".svg")),
        plot = petrik_without_outliers_pruned_tree,
        device = "svg",
        width = 25,
