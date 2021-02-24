@@ -2,7 +2,7 @@
 
 ### Compendium DOI:
 
-<!-- [![DOI](https://img.shields.io/badge/DOI-XXX-blue)](https://doi.org/XXX) -->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4560743.svg)](https://doi.org/10.5281/zenodo.4560743)
 
 The files at the URL above will generate the results as found in the publication. The files hosted at <https://github.com/yesdavid/designspace_culttax_article_2021> are the development versions and may have changed since the paper was published.
 
