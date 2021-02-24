@@ -1,7 +1,7 @@
 ## Data
 
 
-### Late Palaeoindian (Buchanan et al. 2020)
+### Late Palaeoindian Data (Buchanan et al. 2020)
 
 * `outlines_combined_goshen_plainview.RDS`: Outlines in *Momocs'* (Bonhomme et al. 2014) `Out`-format. 
 * `Buchanan_et_al_AA_Supp_Mats_edited.csv`: Spreadsheet containing the supplementary information of `outlines_combined_goshen_plainview.RDS`. 
@@ -27,7 +27,7 @@ All data listed above was extracted from Nicolas (2016) by the maintainer of thi
 
 ### Final Palaeolithic/Earliest Mesolithic Data (Riede et al. 2019)
 
-* `TPS_TP_27_09_2019.TPS`: Outline data in .TPS-format.
+* `TPS_TP_27_09_2019.TPS`: Outlines in `.TPS`-format.
 * `tanged.points.csv`: Spreadsheet containing the supplementary information of `TPS_TP_27_09_2019.TPS`.
 * `chronozones_TP.csv`: Chronozones derived from `tanged.points.csv`.
 
