@@ -1,4 +1,4 @@
-## Research compendium for 'Design space constraints and the cultural taxonomy of European Final Palaeolithic large tanged points -- a comparison of typological, landmark-based and whole-outline geometric morphometric approaches' 
+## Research compendium for 'Design space constraints and the cultural taxonomy of European Final Palaeolithic large tanged points - a comparison of typological, landmark-based and whole-outline geometric morphometric approaches' 
 
 ### Compendium DOI:
 
