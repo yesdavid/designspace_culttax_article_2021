@@ -22,7 +22,7 @@ The drawings from which we extracted the outline-data was kindly provided to us 
 * `nicolas_fleches_2016_catalog_ids_with_coordinates.csv`: Supplementary information scraped from the catalogue of Nicolas (2016).
 * `nicolas_2017_typochronologie.csv`: Supplementary information scraped from the catalogue of Nicolas (2016).
 
-All data listed above was extracted from Nicolas (2016) by the maintainer of this repository. The outlines were extracted from the drawings published in Nicolas (2016) using the *outlineR*-package (Matzig 2021).
+All data listed above was extracted from Nicolas (2016) by the maintainer of this repository. The outlines were extracted using the *outlineR*-package (Matzig 2021).
 
 
 ### Final Palaeolithic/Earliest Mesolithic Data (Riede et al. 2019)
