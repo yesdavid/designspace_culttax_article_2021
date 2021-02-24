@@ -37,4 +37,4 @@ This repository contains data (`1_data`) and code (`2_code`) for the paper. Afte
 
 Code: MIT <http://opensource.org/licenses/MIT> year: 2021, copyright holder: David Nicolas Matzig
 
-Data: The data has been compiled from different resources. Please see the article's references this repository under `./1_data/Readme.md`.
+Data: The data has been compiled from different resources. Please see the article's references or this repository under `./1_data/Readme.md`.
