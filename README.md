@@ -24,7 +24,7 @@ Final Palaeolithic; geometric morphometrics; outline analysis; design space; cul
 
 ### Overview of contents and how to reproduce:
 
-This repository contains data (`1_data`) and code (`2_code`) for the paper. After downloading, the results can be reproduced using `matzig_et_al_2021.Rproj` and the existing folder structure. The required packages and their versions which have been used in this study are listed below and in the `DESCRIPTION`-file.
+This repository contains data (`1_data`) and code (`2_code`) for the paper. After downloading, the results can be reproduced using `matzig_et_al_2021.Rproj` and the existing folder structure. The required packages and their versions which have been used in this study are listed below and in the `DESCRIPTION`-file. All analyses and visualisations presented in this paper were prepared in R 3.6.3 under Ubuntu 18.04.5 LTS (64-bit).
 
 ### Required R-packages and their versions:
 
@@ -37,4 +37,4 @@ This repository contains data (`1_data`) and code (`2_code`) for the paper. Afte
 
 Code: MIT <http://opensource.org/licenses/MIT> year: 2021, copyright holder: David Nicolas Matzig
 
-Data: The data has been compiled from different resources. Please see the article's references or the `Readme.md` in `1_data`.
+Data: The data has been compiled from different resources. Please see the article's references or the `Readme.md` in `./1_data/Readme.md`.
