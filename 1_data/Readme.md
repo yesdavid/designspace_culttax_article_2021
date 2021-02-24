@@ -1,5 +1,6 @@
 ## Data
 
+The authors would like to express their gratitude to Briggs Buchanan and Jan Petřík for providing the photographs and drawings of the Paleoindian as well as the Czech Bell Beaker projectile points respectively from which the whole-outlines used in the case study presented here were extracted.
 
 ### Late Palaeoindian Data (Buchanan et al. 2020)
 
