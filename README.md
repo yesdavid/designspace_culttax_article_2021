@@ -12,7 +12,7 @@ The files at the URL above will generate the results as found in the publication
 
 ### Published in:
 
-TBA
+Journal of Paleolithic Archaeology (accepted)
 
 ### Abstract:
 
