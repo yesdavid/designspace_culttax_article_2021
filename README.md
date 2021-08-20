@@ -12,7 +12,7 @@ The files at the URL above will generate the results as found in the publication
 
 ### Published in:
 
-Journal of Paleolithic Archaeology (accepted)
+Matzig, D.N., Hussain, S.T., and Riede, F. (2021) Design Space Constraints and the Cultural Taxonomy of European Final Palaeolithic Large Tanged Points: A Comparison of Typological, Landmark-Based and Whole-Outline Geometric Morphometric Approaches, Journal of Paleolithic Archaeology [![DOI](https://zenodo.org/badge/DOI/10.1007/s41982-021-00097-2.svg)](https://doi.org/10.1007/s41982-021-00097-2) 
 
 ### Abstract:
 
