@@ -9,6 +9,7 @@ library(dplyr)
 rm(list=ls())
 
 
+
 #### BUCHANAN ET AL.
 # load outlines
 outlines_combined_buchanan <- readRDS(file.path(".", "1_data", "outlines_combined_goshen_plainview.RDS"))
@@ -104,7 +105,7 @@ table(outlinetpNAT_subset$fac$NAT)
 ################# COMBINE OUTLINES
 
 names_buchanan_df <- data.frame(ID = names(outlines_combined_buchanan),
-                                Dataset = "Palaeoindian")
+                                Dataset = "Paleoindian")
 names_petrik_df <- data.frame(ID = names(outlines_combined_petrik),
                               Dataset = "Bell Beaker CZ")
 names_nicolas_fr <- data.frame(ID = names(outlines_nicolas_fr),
@@ -143,8 +144,8 @@ resampled_shapes <- Momocs::filter(all_outlines_OUT,
                                  ID %in% all_outlines_df_resampled$ID)
 
 resampled_shapes$fac$Dataset <- as.character(resampled_shapes$fac$Dataset)
-resampled_shapes$fac[which(resampled_shapes$fac$Dataset != "Palaeoindian" & resampled_shapes$fac$Dataset != "Tanged points"),]$Dataset <- "Late Neolithic/\nEarly Bronze Age"
-resampled_shapes$fac$Dataset <- factor(resampled_shapes$fac$Dataset, levels = c("Palaeoindian", "Late Neolithic/\nEarly Bronze Age", "Tanged points"))
+resampled_shapes$fac[which(resampled_shapes$fac$Dataset != "Paleoindian" & resampled_shapes$fac$Dataset != "Tanged points"),]$Dataset <- "Late Neolithic/\nEarly Bronze Age"
+resampled_shapes$fac$Dataset <- factor(resampled_shapes$fac$Dataset, levels = c("Paleoindian", "Late Neolithic/\nEarly Bronze Age", "Tanged points"))
 
 all_outlines_OUT <- resampled_shapes
 
@@ -273,10 +274,7 @@ screeplot_PCA <- Momocs::scree_plot(all_outlines_OUT_centered_scaled_PCA,
   theme_bw() +
   xlab("Components") +
   theme(legend.position = "right",
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12),
-        legend.text = element_text(size = 14),
-        legend.title = element_text(size = 16))
+        text = element_text(size=25))
 screeplot_PCA
 
 # PCA shape variation
@@ -288,7 +286,8 @@ pc_contrib_plot <- gg$gg +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
         axis.text.y=element_blank(),
-        axis.ticks.y=element_blank())
+        axis.ticks.y=element_blank(),
+        text = element_text(size=25))
 
 all_outlines_OUT_PCA_df <- as.data.frame(all_outlines_OUT_centered_scaled_PCA$x)
 all_outlines_OUT_PCA_df$ID <- all_outlines_OUT_centered_scaled_PCA$fac$ID
@@ -297,13 +296,10 @@ all_outlines_OUT_PCA_df <- dplyr::left_join(all_outlines_OUT_PCA_df, all_outline
 
 a <- ggplot(data = all_outlines_OUT_PCA_df, aes(fill = Dataset)) +
   geom_point(pch = 21, size = 3) +
-  coord_fixed(ratio =1) +
+  # coord_fixed(ratio =1) +
   theme_classic() +
   theme(legend.position = "right",
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12),
-        legend.text = element_text(size = 14),
-        legend.title = element_text(size = 16)) +
+        text = element_text(size=25)) +
   geom_hline(yintercept=0, linetype="dashed", alpha = 0.5) + 
   geom_vline(xintercept=0, linetype="dashed", alpha = 0.5) 
 
@@ -365,40 +361,49 @@ for(i in TS_names){
 }
 disparity_df_TSdiscrete_armatureOutlines_perTShard <- do.call(rbind.data.frame, disparity_df_list)
 
-disparity_TSdiscrete_armatureOutlines_ggplot_perTShard <- ggplot(data = disparity_df_TSdiscrete_armatureOutlines_perTShard, aes(x = Period, y = disparity)) +
-  geom_violin() + 
-  geom_boxplot(notch = T, width = 0.1, aes(fill = TS)) +
+disparity_TSdiscrete_armatureOutlines_ggplot_perTShard <- 
+  ggplot(data = disparity_df_TSdiscrete_armatureOutlines_perTShard, aes(x = Period, y = disparity)) +
+  geom_violin(aes(fill = TS)) + 
+  geom_boxplot(notch = T, width = 0.1, fill = "white", color = "black") +
   theme_bw() +
   ggtitle(NULL) +
   xlab("") + 
-  ylab("Disparity (sum of variances)") +
+  ylab("Disparity") +
   theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-        axis.text=element_text(size=14), #,face="bold"
-        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 0),
-        axis.title=element_text(size=14)) +
+        axis.text=element_text(size=21), #,face="bold"
+        axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 0.5, size=25),
+        axis.title.y = element_text(vjust = 0),
+        axis.title=element_text(size=25)) +
   # ggthemes::scale_fill_colorblind() +
   guides(color = FALSE, fill = FALSE)
+
 disparity_TSdiscrete_armatureOutlines_ggplot_perTShard
 
 
 
 whole_grid <- cowplot::plot_grid(b, screeplot_PCA, c, pc_contrib_plot, d, disparity_TSdiscrete_armatureOutlines_ggplot_perTShard,
-                                 align = "hv", ncol = 2, labels = "AUTO", axis = "l")
+                                 align = "hv", 
+                                 ncol = 2, 
+                                 labels = "AUTO", 
+                                 label_size=25,
+                                 axis = "l")
 whole_grid
 
-height <- 380
-width <- 285
-# ggsave(whole_grid,
-#        filename = file.path(".", "3_output", "whole_grid_resampled.svg"),
-#        height  = height,
-#        width = width,
-#        units = "mm")
-# ggsave(whole_grid,
-#        filename = file.path(".", "3_output", "whole_grid_resampled.png"),
-#        height  = height,
-#        width = width,
-#        units = "mm")
-
+height <- 400
+  width <- 300
+  ggsave(whole_grid,
+         filename = file.path(".", "3_output", "Fig_11_whole_grid_resampled.svg"),
+         height  = height,
+         width = width,
+         units = "mm",
+         bg = "white")
+  ggsave(whole_grid,
+         filename = file.path(".", "3_output", "Fig_11_whole_grid_resampled.png"),
+         height  = height,
+         width = width,
+         units = "mm",
+         bg = "white")
+  
 
 
 

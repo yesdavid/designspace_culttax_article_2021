@@ -137,11 +137,14 @@ ggsave(silhouette_plot,
        units = "mm")
 
 
-petrik_colors <- c("darkgreen","darkblue","maroon3","red","yellow","burlywood","chartreuse","cyan","deeppink","deepskyblue1")
-petrik_colors_code <- c("#006400","#00008b","#b03060","#ff0000","#ffff00","#deb887","#7FFF00","#00ffff","#ff00ff","#6495ed")
+# petrik_colors <- c("darkgreen","darkblue","maroon3","red","yellow","burlywood","chartreuse","cyan","deeppink","deepskyblue1")
+# petrik_colors_code <- c("#006400","#00008b","#b03060","#ff0000","#ffff00","#deb887","#7FFF00","#00ffff","#ff00ff","#6495ed")
 
 
 n_clusters_petrik <- 10
+set.seed(1)
+petrik_colors <- RColorBrewer::brewer.pal(n = n_clusters_petrik,
+                                          "Paired")
 
 
 ###
@@ -156,18 +159,27 @@ outlines_combined_petrik_centered_scaled_w_cluster <- Momocs::Out(outlines_combi
 
 
 # # saves plot of each individual cluster with its respective artefacts
-upgma_path <- file.path(output_folder "petrik_clusters_panels_upgma")
+upgma_path <- file.path(output_folder, "petrik_clusters_panels_upgma")
 dir.create(upgma_path,
            recursive = T)
 
 for (i in 1:n_clusters_petrik){
 
-  mypath <- file.path(upgma_path, paste0("petrik_2018_upgma_k10_cluster_colors_cluster_", i, ".png"))
+  mypath_png <- file.path(upgma_path, paste0("petrik_2018_upgma_k10_cluster_colors_cluster_", i, ".png"))
 
-  png(file=mypath,
+  png(file=mypath_png,
       width = 800, height = 800, units = "px")
   Momocs::panel(Momocs::slice(outlines_combined_petrik_centered_scaled_w_cluster, cluster == i),
-                # main = paste("Cluster", i, "; n = ", nrow(filter(outlines_combined_petrik_centered_scaled_w_cluster$fac, cluster == i))),
+                main = NULL,# main = paste("Cluster", i, "; n = ", nrow(filter(outlines_combined_petrik_centered_scaled_w_cluster$fac, cluster == i))),
+                col = petrik_colors[i])
+  dev.off()
+  
+  mypath_svg <- file.path(upgma_path, paste0("petrik_2018_upgma_k10_cluster_colors_cluster_", i, ".svg"))
+  
+  svg(file=mypath_svg,
+      width = 8, height = 8)
+  Momocs::panel(Momocs::slice(outlines_combined_petrik_centered_scaled_w_cluster, cluster == i),
+                main = NULL,# main = paste("Cluster", i, "; n = ", nrow(filter(outlines_combined_petrik_centered_scaled_w_cluster$fac, cluster == i))),
                 col = petrik_colors[i])
   dev.off()
 }
@@ -198,20 +210,26 @@ petrik_w_Cluster_PCA_names$Cluster <- outlines_combined_petrik_centered_scaled_w
 
 names(petrik_colors_code) <- c(1:length(unique(outlines_combined_petrik_centered_scaled_w_cluster_PCA$fac$cluster)))
 
-petrik_w_Cluster_PCA_names$color <- sapply(petrik_w_Cluster_PCA_names$Cluster, function(x){petrik_colors_code[as.integer(x)]})
+petrik_w_Cluster_PCA_names$color <- "NULL"
+for(i in unique(as.integer(petrik_w_Cluster_PCA_names$Cluster))) {
+  petrik_w_Cluster_PCA_names[which(petrik_w_Cluster_PCA_names$Cluster == factor(i, levels = c(1:10))), "color"] <- petrik_colors[i]
+}
 
-PCA_plot_petrik_with_outliers <- ggplot(data = petrik_w_Cluster_PCA_names, aes(x = PC1, y = PC2, fill = Cluster)) +
+
+PCA_plot_petrik_with_outliers <- 
+  ggplot(data = petrik_w_Cluster_PCA_names, aes(x = PC1, y = PC2, fill = Cluster)) +
   geom_point(size = 3, pch = 21) +
-  scale_fill_manual(values = petrik_colors_code) +
+  scale_fill_manual(values = petrik_colors) +
   coord_fixed(ratio =1) +
   theme_bw() +
   xlab(paste0("PC1 (", round(outlines_combined_petrik_centered_scaled_w_cluster_PCA$eig[1]*100, digits = 0), "%)")) +
   ylab(paste0("PC2 (", round(outlines_combined_petrik_centered_scaled_w_cluster_PCA$eig[2]*100, digits = 0), "%)")) +
   theme(legend.position = "bottom",
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12),
+        axis.title = element_text(size = 18),
+        axis.text = element_text(size = 18),
         legend.text = element_text(size = 14),
-        legend.title = element_text(size = 16)) + 
+        legend.title = element_text(size = 16),
+        text = element_text(size=20)) + 
   guides(fill = FALSE) + 
   geom_hline(yintercept=0, linetype="dashed", alpha = 0.5) + 
   geom_vline(xintercept=0, linetype="dashed", alpha = 0.5)
@@ -219,7 +237,7 @@ PCA_plot_petrik_with_outliers <- ggplot(data = petrik_w_Cluster_PCA_names, aes(x
 
 ggsave(PCA_plot_petrik_with_outliers,
        filename = file.path(output_folder, "PCA_plot_petrik_with_outliers.svg"),
-       width = 7,
+       width = 10,
        height = 5,
        dpi = 320,
        units = "in",
@@ -284,10 +302,21 @@ dir.create(mean_shapes_upgma_path,
 
 for (i in 1:n_clusters_petrik){
   
-  mypath <- file.path(mean_shapes_upgma_path, paste0("petrik_2018_w_cluster_upgma_colors_", "Cluster ", i, " (n=",colSums(table(clusters_petrik_cutree_k10))[[i]], ")_mean_shp.png"))
+  mypath_png <- file.path(mean_shapes_upgma_path, paste0("petrik_2018_w_cluster_upgma_colors_", "Cluster ", i, " (n=",colSums(table(clusters_petrik_cutree_k10))[[i]], ")_mean_shp.png"))
   
-  png(file=mypath,
+  png(file=mypath_png,
       width = 800, height = 800, units = "px")
+  Momocs::panel(Momocs::slice(mean_shapes_petrik_cluster_out, cluster == paste0("cluster_",i)),
+                main = NULL,
+                col = petrik_colors[i])
+  
+  dev.off()
+  
+  
+  mypath_svg <- file.path(mean_shapes_upgma_path, paste0("petrik_2018_w_cluster_upgma_colors_", "Cluster ", i, " (n=",colSums(table(clusters_petrik_cutree_k10))[[i]], ")_mean_shp.svg"))
+  
+  svg(file=mypath_svg,
+      width = 8, height = 8)
   Momocs::panel(Momocs::slice(mean_shapes_petrik_cluster_out, cluster == paste0("cluster_",i)),
                 main = NULL,
                 col = petrik_colors[i])
@@ -312,12 +341,22 @@ for (i in 1:length(outlines_petrik_upgma_cuttree$labels)){
 outlines_petrik_upgma_cuttree$labels <- new_labels
 
 
-petrik_pruned_tree <- ggtree(outlines_petrik_upgma_cuttree, 
+petrik_pruned_tree <- 
+  ggtree(outlines_petrik_upgma_cuttree, 
                              layout = "rectangular") + 
   xlim(NA, 6) + 
   geom_tiplab(aes(image=paste0(path_to_mean_shapes_petrik, label, "_mean_shp.png")), 
-              geom="image", offset=2, align=2, size=0.1, hjust = 0.5)  + 
-  geom_tiplab(geom='label', offset=1, hjust=.5, size = 5) + 
+              geom="image", 
+              offset=0.5, 
+              align=2, 
+              hjust = 0.5, 
+              size = 0.1) +
+  geom_tiplab(geom='label',
+              offset=2, 
+              hjust=.5, 
+              size = 8, 
+              fontface='italic', 
+              family="TT Times New Roman") + 
   geom_treescale()
 
 ggsave(filename = file.path(output_folder, paste0("pruned_dendro_UPGMA_petrik_k_", n_clusters_petrik, ".svg")),

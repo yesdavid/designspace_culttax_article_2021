@@ -75,11 +75,11 @@ unique(outlinetpNAT_subset$fac[,c("NAT", "Chronozone (Relative)")])
 ## Country X NAT
 TP_country_x_nat <- outlinetpNAT_subset$fac[,c("NAT", "Country")]
 TP_country_x_nat$NAT <- unlist(strsplit(TP_country_x_nat$NAT, " Point"))
-TP_country_x_nat$Country <- factor(TP_country_x_nat$Country, levels = c("France", "Belgium", "The Netherlands", "Germany", "Denmark", "Sweden", "Poland", "Belarus", "Ukraine", "Russia"))
+TP_country_x_nat$Country <- factor(TP_country_x_nat$Country, levels = c("France", "Belgium", "The Netherlands", "Germany", "Denmark", "Sweden", "Poland", "Belarus", "Ukraine", "Russia", "Lithuania"))
 table_TP_country_x_nat <- t(table(TP_country_x_nat))
 print(table_TP_country_x_nat)
 
-## Chronozone X NAT
+## Chronozone X NAT 
 TP_chronozone_x_nat <- outlinetpNAT_subset$fac[,c("NAT", "Chronozone (Relative)")]
 TP_chronozone_x_nat$NAT <- unlist(strsplit(TP_chronozone_x_nat$NAT, " Point"))
 # TP_country_x_nat$`Chronozone (Relative)` <- factor(TP_country_x_nat$`Chronozone (Relative)`, 
@@ -113,7 +113,8 @@ print(table_TP_chronozone_x_nat)
   
   scree_plot <- Momocs::scree_plot(tanged_points_PCA,
                                    nax = 1:5) +  
-    theme_bw()
+    theme_bw() +
+    theme(text = element_text(size=20))
   
   minimum_no_of_pcs_tanged_points_PCA <- ncol(tanged_points_PCA$x)
   
@@ -133,7 +134,8 @@ print(table_TP_chronozone_x_nat)
     theme(axis.text.x=element_blank(),
           axis.ticks.x=element_blank(),
           axis.text.y=element_blank(),
-          axis.ticks.y=element_blank())
+          axis.ticks.y=element_blank(),
+          text = element_text(size=20))
   # ggsave(plot = pc_contrib_plot,
   #        filename = file.path(output_folder, "PCA_contrib.svg"),
   #        device = "svg",
@@ -160,7 +162,7 @@ print(table_TP_chronozone_x_nat)
                                                       "Ward" = tanged_points_PCA_wardD2)
 
   
-  tanged_points_PCA_NJ <- phangorn::NJ(tanged_points_PCA_dist)
+  
   
   
   
@@ -175,15 +177,17 @@ print(table_TP_chronozone_x_nat)
   silhouette_plot <- ggplot(TP_NbClust_df, aes(x = NClust, y = Silhouette)) + geom_point() + geom_line() + theme_bw() +
     scale_x_continuous(breaks = seq(2, max(TP_NbClust_df$NClust)+1, by = 1)) +
     xlab("Number of clusters") +
-    ylab("Average silhouette value")
+    ylab("Average silhouette value") +
+    theme(text=element_text(size=20))
   gap_plot <- ggplot(TP_NbClust_df, aes(x = NClust, y = Gap)) + geom_point() + geom_line() + theme_bw() +
     scale_x_continuous(breaks = seq(2, max(TP_NbClust_df$NClust)+1, by = 1)) +
     xlab("Number of clusters") +
-    ylab("Gap statistic (k)")
+    ylab("Gap statistic (k)") +
+    theme(text=element_text(size=20))
   cowplot::plot_grid(silhouette_plot, gap_plot)
   
-  height_silhouette_plot <- 100
-  width_silhouette_plot <- 100
+  height_silhouette_plot <- 200
+  width_silhouette_plot <- 200
   
   output_folder_ward <- file.path(output_folder, "Ward")
   dir.create(output_folder_ward,
@@ -201,16 +205,18 @@ print(table_TP_chronozone_x_nat)
          units = "mm")
   
   
-  n_clusters_tanged_points_PCA <- 10 
+      n_clusters_tanged_points_PCA <- 10 
   paste0("n_clusters_tanged_points_PCA = ", n_clusters_tanged_points_PCA)
   
   set.seed(1)
-  tanged_points_PCA_colors <- randomcoloR::distinctColorPalette(n_clusters_tanged_points_PCA)
+  tanged_points_PCA_colors <- RColorBrewer::brewer.pal(n = n_clusters_tanged_points_PCA, 
+                                                       "Paired")
+  
   
   
   
   world <- rgeos::gBuffer(rworldmap::getMap(resolution = "high"), byid=TRUE, width=0)
-  clipper_europe <- as(raster::extent(-4, 38, 44.5, 57.5), "SpatialPolygons")
+  clipper_europe <- as(raster::extent(0, 38, 47.5, 58.5), "SpatialPolygons") # -4, 38, 44.5, 57.5
   proj4string(clipper_europe) <- CRS(proj4string(world))
   world_clip <- raster::intersect(world, clipper_europe)
   world_clip_f <- fortify(world_clip)
@@ -243,7 +249,7 @@ print(table_TP_chronozone_x_nat)
     
     
     chosen_TP_w_cluster <- Momocs::Out(outlinetpNAT_subset$coo,
-                                       fac = current_treecut)
+                                         fac = current_treecut)
 
     # harmonic calibration
     chosen_TP_w_cluster_harmonics <- Momocs::calibrate_harmonicpower_efourier(chosen_TP_w_cluster,
@@ -276,7 +282,8 @@ print(table_TP_chronozone_x_nat)
       coord_cartesian(xlim = c(min(chosen_TP_w_cluster_PCA_df[,c("PC1")]) + min(chosen_TP_w_cluster_PCA_df[,c("PC1")])*0.1, 
                                max(chosen_TP_w_cluster_PCA_df[,c("PC1")]) + max(chosen_TP_w_cluster_PCA_df[,c("PC1")])*0.1),
                       ylim = c(min(chosen_TP_w_cluster_PCA_df[,c("PC2")]) + min(chosen_TP_w_cluster_PCA_df[,c("PC2")])*0.1, 
-                               max(chosen_TP_w_cluster_PCA_df[,c("PC2")]) + max(chosen_TP_w_cluster_PCA_df[,c("PC2")])*0.1))
+                               max(chosen_TP_w_cluster_PCA_df[,c("PC2")]) + max(chosen_TP_w_cluster_PCA_df[,c("PC2")])*0.1)) +
+      theme(text = element_text(size=20))
     
     
     b <- a + aes(x = PC1, y = PC2) +
@@ -297,9 +304,13 @@ print(table_TP_chronozone_x_nat)
       guides(fill=guide_legend(nrow=2,byrow=TRUE, title = "Cluster"))
     #guides(color = FALSE, fill = FALSE)
     
+
     
-    whole_grid <- cowplot::plot_grid(b, scree_plot, c, pc_contrib_plot, d,
-                                     align = "hv", ncol = 2, labels = "AUTO", axis = "l")
+    col_1 <- cowplot::plot_grid(b, c, d,
+                       align = "hv", ncol = 1, labels = c("A", "C", "E"), axis = "l")
+    col_2 <- cowplot::plot_grid(scree_plot, pc_contrib_plot, rel_heights = c(1,2),
+                                align = "hv", ncol = 1, labels = c("B","D"), axis = "l")
+    whole_grid <- cowplot::plot_grid(col_1, col_2)
     
     height <- 380
     width <- 285
@@ -330,7 +341,7 @@ print(table_TP_chronozone_x_nat)
         width = 800, height = 600, units = "px")
     pairs(chosen_TP_w_cluster_PCA$x[,c(1:5)],
           col = tanged_points_PCA_colors[chosen_TP_w_cluster_PCA$fac$cluster],
-          cex = 1,
+          cex=1.5, cex.axis = 1.5, cex.lab = 1.5,
           pch = 15,
           lower.panel = NULL)
     dev.off()
@@ -353,7 +364,7 @@ print(table_TP_chronozone_x_nat)
          ylab=paste("PCA 2 (", round(summary(chosen_TP_w_cluster_PCA)$importance[5]*100, 0), "%)", sep = ""),
          bg=tanged_points_PCA_colors[chosen_TP_w_cluster_PCA$fac$cluster], 
          pch = 21,
-         cex=1,
+         cex=1.5, cex.axis = 1.5, cex.lab = 1.5,
          las=1,
          asp=1)
     # Add grid lines
@@ -460,8 +471,11 @@ print(table_TP_chronozone_x_nat)
                                     layout = "rectangular") + 
         xlim(NA,6) +
         geom_tiplab(aes(image=file.path(TP_algorithm_pathname_means, paste0(label, "_mean_shp.png"))), 
-                    geom="image", offset=0.5, align=2, hjust = 0.5) + 
-        geom_tiplab(geom='label', offset=1.5, hjust=.5, size = 5) + 
+                    geom="image", offset=0.5, align=2, hjust = 0.5, size = 0.08) + 
+        geom_tiplab(geom='label', offset=2, hjust=.5, 
+                    size = 8, 
+                    fontface='italic', 
+                    family="TT Times New Roman") + 
         geom_treescale()
       
       ggsave(filename = file.path(TP_algorithm_pathname, paste0(current_algorithm_name, "_pruned_dendro.svg")),
@@ -497,6 +511,7 @@ print(table_TP_chronozone_x_nat)
                       fill = cluster), shape = 21, size = 3,
                   width = 0.1, height = 0.1
       ) +   
+      scale_fill_manual(values = tanged_points_PCA_colors) +
       facet_wrap(~cluster,
                  scales = "fixed", 
                  labeller = as_labeller(cluster_names),
@@ -505,7 +520,10 @@ print(table_TP_chronozone_x_nat)
       theme_classic() +  
       xlab("Longitude") +
       ylab("Latitude") +
-      theme(legend.position = "none")
+      scale_y_continuous(expand = c(0,0)) + 
+      scale_x_continuous(expand = c(0,0)) +
+      theme(legend.position = "none",
+            text = element_text(size=20))
     
     ggsave(filename = file.path(TP_algorithm_pathname, paste0("distribution_map_", current_algorithm_name, ".svg")),
            plot = current_distribution_map,
@@ -534,42 +552,78 @@ print(table_TP_chronozone_x_nat)
   tanged_points_PCA_chronozones$fac <- dplyr::left_join(tanged_points_PCA_chronozones$fac, chronozones_TP, by = "NAT")
   
   TP_NATs_NJ <- as.data.frame(tanged_points_PCA_chronozones$fac[,c("FN", "NAT", "Chronozone")])
-  # TP_NATs_NJ$NAT <- sapply
+  TP_NATs_NJ$NAT <- unlist(strsplit(TP_NATs_NJ$NAT, " Point"))
   
   chronozones_TP_df <- data.frame(tanged_points_PCA_chronozones$fac$NAT)
   rownames(chronozones_TP_df) <- tanged_points_PCA_chronozones$fac$FN
+  names(chronozones_TP_df) <- "NAT"
   
   
-  NJ_TP_ggtree <- ggtree(tanged_points_PCA_NJ) %<+% TP_NATs_NJ +
-    geom_tiplab(size=3, 
-                aes(color = Chronozone)) +
+  f <- function(x) phangorn::NJ(dist(x))
+  a <- tanged_points_PCA$x[,1:minimum_no_of_pcs_tanged_points_PCA]
+  tr <- f(a)
+  X <- ape::boot.phylo(phy = tr, 
+                       x = a, 
+                       FUN = f, 
+                       trees = TRUE,
+                       B = 10000,
+                       multicore = T,
+                       mc.cores = parallel::detectCores()-1) 
+  saveRDS(X,
+          file = file.path(output_folder, "NJ_bootstrapped10k_trees_TP.RDS"))
+  
+  tree <- phangorn::plotBS(tr, X$trees)
+  saveRDS(tree,
+          file = file.path(output_folder, "NJ_bootstrapped10k_trees_TP_tree.RDS"))
+  tree <- readRDS(file.path(output_folder, "NJ_bootstrapped10k_trees_TP_tree.RDS"))
+  tree2 <- phangorn::pruneTree(tree, 50)#mayority consensus tree
+  
+  
+  tanged_points_PCA_NJ <- tree
+  tanged_points_PCA_NJ$tip.label[which(tanged_points_PCA_NJ$tip.label=="H\\E4cklingen_11")] <- "Haecklingen_11"
+  
+  NJ_TP_ggtree <- 
+    ggtree(tanged_points_PCA_NJ) %<+% TP_NATs_NJ +
+    geom_tiplab(size=5, 
+                aes(color = Chronozone),
+                align = F) +
     geom_treescale() + 
-    scale_colour_discrete(na.translate = F)
+    scale_colour_discrete(na.translate = F) #+ 
+    # # guides(fill=guide_legend(title="NAT")) +
+    # geom_label2(aes(subset = (!isTip & as.numeric(label) >= 50),
+    #                 label = round(as.numeric(label), digits = 0))) # +
+  # geom_label2(aes(subset = (!isTip), label=round(as.numeric(label), digits = 0)))
   
+  
+  
+  chronozones_TP_heatmap <- data.frame(NAT = TP_NATs_NJ$NAT)
+  rownames(chronozones_TP_heatmap) <- TP_NATs_NJ$FN
   
   NJ_TP_gheatmap <- gheatmap(NJ_TP_ggtree,
-                             chronozones_TP_df,
+                             chronozones_TP_heatmap,
                              offset=0.1,
                              width=0.1,
-                             legend_title="NAT",
-                             colnames = F) +
+                             colnames = T,
+                             font.size = 10) +
     scale_x_ggtree() +
-    theme(plot.title = element_text(hjust = 0.5)) + 
+    theme(plot.title = element_text(hjust = 0.5),
+          legend.text=element_text(size=31),
+          legend.title=element_text(size=31)) + 
     guides(fill=guide_legend(title="NAT")) +
     scale_fill_discrete(na.translate = F)
   
-  NJ_TP_gheatmap_height <- 15
-  NJ_TP_gheatmap_width <- 15
-  
-  ggsave(NJ_TP_gheatmap,
-         filename = file.path(output_folder, "NJ_with_heatmap_chronozones.svg"),
-         width = NJ_TP_gheatmap_width,
-         height = NJ_TP_gheatmap_height,
-         units = "in")
-  ggsave(NJ_TP_gheatmap,
-         filename = file.path(output_folder, "NJ_with_heatmap_chronozones.png"),
-         width = NJ_TP_gheatmap_width,
-         height = NJ_TP_gheatmap_height,
-         units = "in")
-  
+    NJ_TP_gheatmap_height <- 30
+    NJ_TP_gheatmap_width <- 15
+    
+    ggsave(NJ_TP_gheatmap,
+           filename = file.path(output_folder, "Fig_10_NJ_bootstrapped10k_with_heatmap_chronozones.svg"),
+           width = NJ_TP_gheatmap_width,
+           height = NJ_TP_gheatmap_height,
+           units = "in")
+    ggsave(NJ_TP_gheatmap,
+           filename = file.path(output_folder, "Fig_10_NJ_bootstrapped10k_with_heatmap_chronozones.png"),
+           width = NJ_TP_gheatmap_width,
+           height = NJ_TP_gheatmap_height,
+           units = "in")
+      
   

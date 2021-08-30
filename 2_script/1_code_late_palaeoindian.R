@@ -12,7 +12,7 @@ library(psych)
 
 rm(list=ls())
 
-output_folder <- file.path(".", "3_output", "late_palaeoindian_bifac_points")
+output_folder <- file.path(".", "3_output", "late_paleoindian_bifac_points")
 dir.create(output_folder,
            recursive = T)
 

@@ -103,8 +103,8 @@ svg(file.path(output_folder, "nicolas_2016_pca_w_outlier_names.svg"),
     height = 8)
 plot(outlines_combined_nicolas_2016_centered_scaled_PCA$x[,1],
      outlines_combined_nicolas_2016_centered_scaled_PCA$x[,2],
-     xlab=paste("PCA 1 (", round(summary(outlines_combined_nicolas_2016_centered_scaled_PCA)$importance[2]*100, 1), "%)", sep = ""),
-     ylab=paste("PCA 2 (", round(summary(outlines_combined_nicolas_2016_centered_scaled_PCA)$importance[5]*100, 1), "%)", sep = ""),
+     xlab=paste("PC 1 (", round(summary(outlines_combined_nicolas_2016_centered_scaled_PCA)$importance[2]*100, 1), "%)", sep = ""),
+     ylab=paste("PC 2 (", round(summary(outlines_combined_nicolas_2016_centered_scaled_PCA)$importance[5]*100, 1), "%)", sep = ""),
      pch=pch.group,
      col="black",
      bg=col.group,
@@ -268,7 +268,7 @@ nicolas_list_different_clustering_methods <- list("UPGMA" = nicolas_2016_without
 
 
 ############# k 
-library(NbClust)
+# library(NbClust)
 nicolas_2016_without_outliers_NbClust_ward <- NbClust::NbClust(data = nicolas_2016_without_outliers_PCA$x[,1:minimum_no_of_pcs_nicolas_without_outliers],
                                                                distance = "euclidean",
                                                                method = "ward.D2",
@@ -306,8 +306,11 @@ ggsave(silhouette_plot,
 
 n_clusters_nicolas_2016_without_outliers <- 9
 
+
 set.seed(1)
-nicolas_colors_without_outliers <- randomcoloR::distinctColorPalette(n_clusters_nicolas_2016_without_outliers)
+nicolas_colors_without_outliers <- RColorBrewer::brewer.pal(n = n_clusters_nicolas_2016_without_outliers,
+                                                            "Paired")
+
 
 
 #### create pruned dendrogram with mean shapes, artefact panel per cluster and spatial distribution map of created clusters for list of fusion methods established above (UPGMA, UPGMC, Ward's method)
@@ -378,7 +381,7 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
       width = 800, height = 600, units = "px")
   pairs(nicolas_2016_without_outliers_w_cluster_PCA$x[,c(1:5)],
         col = nicolas_colors_without_outliers[nicolas_2016_without_outliers_w_cluster_PCA$fac$cluster],
-        cex = 1,
+        cex=1.5, cex.axis = 1.5, cex.lab = 1.5,
         pch = 15,
         lower.panel = NULL)
   dev.off()
@@ -391,7 +394,7 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
        ylab=paste("PCA 2 (", round(summary(nicolas_2016_without_outliers_w_cluster_PCA)$importance[5]*100, 0), "%)", sep = ""),
        bg=nicolas_colors_without_outliers[nicolas_2016_without_outliers_w_cluster_PCA$fac$cluster], 
        pch = 21,
-       cex=1,
+       cex=1.5, cex.axis = 1.5, cex.lab = 1.5,
        las=1,
        asp=1)
   # Add grid lines
@@ -408,7 +411,7 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
         width = 800, height = 800, units = "px")
     
     Momocs::panel(Momocs::slice(nicolas_2016_without_outliers_w_cluster, cluster == i),
-                  main = paste("Cluster", i),
+                  main = NULL,
                   col = nicolas_colors_without_outliers[i])
     
     dev.off()
@@ -418,10 +421,12 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
     svg(file=mypath_svg, width = 8, height = 8)
     
     Momocs::panel(Momocs::slice(nicolas_2016_without_outliers_w_cluster, cluster == i),
-                  main = paste("Cluster", i),
+                  main = NULL,
                   col = nicolas_colors_without_outliers[i])
     
     dev.off()
+    
+    
   }
   
   
@@ -505,8 +510,17 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
                                   layout = "rectangular") + 
       xlim(NA,6) +
       geom_tiplab(aes(image=file.path(nicolas_algorithm_pathname_means, paste0(label, "_mean_shp.png"))), 
-                  geom="image", offset=0.5, align=2, hjust = 0.5) + 
-      geom_tiplab(geom='label', offset=1.5, hjust=.5, size = 5) + 
+                  geom="image", 
+                  offset=0.5, 
+                  align=2, 
+                  hjust = 0.5, 
+                  size = 0.1) +
+      geom_tiplab(geom='label',
+                  offset=2, 
+                  hjust=.5, 
+                  size = 8, 
+                  fontface='italic', 
+                  family="TT Times New Roman") + 
       geom_treescale()
     
     ggsave(filename = file.path(nicolas_algorithm_pathname, "pruned_dendro.svg"),
@@ -551,14 +565,18 @@ for (current_algorithm_name in names(nicolas_list_different_clustering_methods))
                 shape = 21, size = 3,
                 width = 0.1, height = 0.1
     ) +   
+    scale_fill_manual(values = nicolas_colors_without_outliers) +
     facet_wrap(~cluster,
                scales = "fixed", 
                labeller = as_labeller(cluster_names)) +
     coord_quickmap() +  
     theme_classic() + 
     xlab("Longitude") +
-    ylab("Latitude") +
-    theme(legend.position = "none")
+    ylab("Latitude")  +
+    scale_y_continuous(expand = c(0,0)) + 
+    scale_x_continuous(expand = c(0,0)) +
+    theme(legend.position = "none",
+          text = element_text(size=20))
   
   ggsave(filename = file.path(nicolas_algorithm_pathname, paste0("distribution_map_", current_algorithm_name, ".svg")),
          plot = current_distribution_map,
@@ -608,7 +626,25 @@ names_artefacts_ID_and_period$Period <- as.factor(names_artefacts_ID_and_period$
 nicolas_2016_without_outliers_PCA_as_df_subset_typochron_FR$ID_country <- NULL
 nicolas_typochron_FR_dist <- dist(nicolas_2016_without_outliers_PCA_as_df_subset_typochron_FR, method = "euclidean")
 
-nicolas_typochron_FR_NJ <- phangorn::NJ(nicolas_typochron_FR_dist)
+# nicolas_typochron_FR_NJ <- phangorn::NJ(nicolas_typochron_FR_dist)
+
+
+
+a <- nicolas_2016_without_outliers_PCA_as_df_subset_typochron_FR
+f <- function(x) phangorn::NJ(dist(x))
+tr <- f(a)
+X <- ape::boot.phylo(phy = tr, 
+                     x = a, 
+                     FUN = f, 
+                     trees = TRUE,
+                     B = 10000) 
+tree <- phangorn::plotBS(tr, X$trees)
+tree2 <- phangorn::pruneTree(tree, 50)#mayority consensus tree
+
+
+
+nicolas_typochron_FR_NJ <- tree
+
 
 additional_information_period <- data.frame(Period = names_artefacts_ID_and_period[,c("Period")])
 rownames(additional_information_period) <- names_artefacts_ID_and_period$artefact_ID
@@ -616,36 +652,48 @@ rownames(additional_information_period) <- names_artefacts_ID_and_period$artefac
 
 
 NJ_nicolas_ggtree <- ggtree(nicolas_typochron_FR_NJ) %<+% names_artefacts_ID_and_period +
-  geom_tiplab(size=3, 
+  geom_hilight(node=132, fill="gold", alpha = 0.3) +
+  geom_hilight(node=143, fill="darkgreen", alpha = 0.3) +
+  geom_tiplab(size=4, 
               aes(label = ID_country,
                   color = ID_country)) +
   geom_treescale() + 
-  scale_colour_discrete(na.translate = F) + 
-  guides(color=guide_legend(title="Site ID"))
-
+  scale_colour_discrete(na.translate = F) +
+  theme(legend.position = "none") 
+  # guides(color=guide_legend(title="Site ID")) # +
+  # geom_label2(aes(subset = (!isTip & as.numeric(label) >= 50),
+  #                 label = round(as.numeric(label), digits = 0))) # +
+  # geom_label2(aes(subset = (!isTip), label=round(as.numeric(label), digits = 0)))
+NJ_nicolas_ggtree
 
 NJ_nicolas_gheatmap <- gheatmap(NJ_nicolas_ggtree,
                                 additional_information_period,
                                 offset=0.1,
                                 width=0.1,
                                 legend_title="Period",
-                                colnames = T) +
+                                colnames = T,
+                                font.size = 6) +
   scale_x_ggtree() +
-  theme(plot.title = element_text(hjust = 0.5)) + 
-  guides(fill=guide_legend(title="Period")) +
+  theme(plot.title = element_text(hjust = 0.5),
+        legend.text=element_text(size=25),
+        legend.title=element_text(size=25)) + 
+  guides(fill=guide_legend(title="Period"),
+         color = FALSE) +
   scale_fill_discrete(na.translate = F)
 
-NJ_nicolas_gheatmap_height <- 10
+NJ_nicolas_gheatmap
+
+NJ_nicolas_gheatmap_height <- 15
 NJ_nicolas_gheatmap_width <- 10
 
 ggsave(NJ_nicolas_gheatmap,
-       filename = file.path(output_folder, "NJ_with_heatmap_periods.svg"),
+       filename = file.path(output_folder, "Fig_6_NJ_bootstrapped10k_with_heatmap_periods.svg"),
        width = NJ_nicolas_gheatmap_width,
        height = NJ_nicolas_gheatmap_height,
        device = "svg",
        units = "in")
 ggsave(NJ_nicolas_gheatmap,
-       filename = file.path(output_folder, "NJ_with_heatmap_periods.png"),
+       filename = file.path(output_folder, "Fig_6_NJ_bootstrapped10k_with_heatmap_periods.png"),
        width = NJ_nicolas_gheatmap_width,
        height = NJ_nicolas_gheatmap_height,
        device = "png",
